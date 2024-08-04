@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  admin
+  institute
+  viewer
+}
+
+enum InstrumentType {
+  select
+  multiselect
+  text
+  date
+}
+
+model Users {
+  id String @id
+  areaId Int?
+  username String
+  password String
+  email String
+  status Status
+
+  area Areas? @relation(fields: [areaId], references: [id])
+  session Session_tokens[]
+}
+
+model Areas {
+  id Int @id @default(autoincrement())
+  name String
+
+  user Users[]
+}
+
+model Topics {
+  id Int @id @default(autoincrement())
+  topic String
+  part Int
+
+  instrument Instrument[]
+}
+
+model Instrument {
+  id Int @id @default(autoincrement())
+  topicId Int
+  question String
+  type InstrumentType
+
+  topic Topics @relation(fields: [topicId], references: [id])
+  choice Choices[]
+  respons Responses[]
+}
+
+model Choices {
+  id Int @id @default(autoincrement())
+  instrumentId Int
+  value String
+
+  instrument Instrument @relation(fields: [instrumentId], references: [id])
+}
+
+model Responses {`
+  id Int @id @default(autoincrement())
+  instrumentId Int
+  value String
+
+  instrument Instrument @relation(fields: [instrumentId], references: [id])
+}
+
+model Session_tokens {
+  id Int @id @default(autoincrement())
+  userId String
+  token String
+  exp DateTime
+
+  user Users @relation(fields: [userId], references: [id])
+}

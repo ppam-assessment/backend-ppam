@@ -1,0 +1,36 @@
+{
+  "name": "ppam-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx tsx --env-file=.env app.ts",
+    "prisma-client": "npx prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "@fastify/express": "^3.0.0",
+    "@fastify/jwt": "^8.0.1",
+    "@prisma/client": "^5.17.0",
+    "bcrypt": "^5.1.1",
+    "fastify": "^4.28.1",
+    "fastify-zod": "^1.4.0",
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^22.0.3",
+    "@types/uuid": "^10.0.0",
+    "dotenv": "^16.4.5",
+    "prisma": "^5.17.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.4"
+  }
+}

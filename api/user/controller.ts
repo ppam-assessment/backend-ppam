@@ -7,13 +7,6 @@ import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/
 import { addSession } from "../../service/prisma/token.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 
-export async function testHandler(req: FastifyRequest, res: FastifyReply) {
-  return res
-    .code(200)
-    .header("Content-Type", "application/json; charset=utf-8")
-    .send({ hello: "world!" });
-}
-
 export async function loginController(req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) {
   loginUserSchema.safeParse(req.body)
   const { email, username, password } = req.body

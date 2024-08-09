@@ -86,7 +86,7 @@ model Responses {
 }
 
 model Sessions {
-  id Int @id @default(autoincrement())
+  id String @id
   userId String
   token String
   exp DateTime

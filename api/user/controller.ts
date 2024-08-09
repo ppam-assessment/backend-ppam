@@ -36,7 +36,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
     username: user.username,
   })
 
-  await addTokenByUserId({ userId: user.id, token, exp})
+  await addTokenByUserId({ iduserId: user.id, token, exp})
 
   return res.code(200).send({
     message: 'Login success.',

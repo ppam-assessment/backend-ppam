@@ -5,18 +5,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema, userSchemas } from "./schema.js";
 import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
 import { addTokenByUserId } from "../../service/prisma/token.js";
+import getNextDay from "../../utils/lib/timePeriod.js";
 
 export async function testHandler(req: FastifyRequest, res: FastifyReply) {
-    return res
-      .code(200)
-      .header("Content-Type", "application/json; charset=utf-8")
-      .send({ hello: "world!" });
-  }
+  return res
+    .code(200)
+    .header("Content-Type", "application/json; charset=utf-8")
+    .send({ hello: "world!" });
+}
 
 export async function loginController(req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) {
   loginUserSchema.safeParse(req.body)
   const { email, username, password } = req.body
-  const exp = new Date( Date.now() + 1000 * 60 * 60 * 24 * 7)
+  const exp = await getNextDay()
+  const sessionId = uuidv4();
   
   const user = email ?
     await getUserByEmail({ email })
@@ -36,7 +38,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
     username: user.username,
   })
 
-  await addTokenByUserId({ iduserId: user.id, token, exp})
+  await addTokenByUserId({ id:sessionId, userId: user.id, token, exp})
 
   return res.code(200).send({
     message: 'Login success.',
@@ -56,8 +58,9 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
 
   const { email, username, password, status } = req.body;
   const id = uuidv4();
+  const sessionId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10)
-  const exp = new Date( Date.now() + 1000 * 60 * 60 * 24 * 7)
+  const exp = await getNextDay()
 
   const user = await createUser({ id, username, email, password: hashedPassword, status})
 
@@ -66,7 +69,7 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
     username: user.username,
   })
 
-  await addTokenByUserId({ userId: user.id, token, exp})
+  await addTokenByUserId({ id: sessionId, userId: user.id, token, exp})
 
   return res.code(201).send({
     message: "User created.",

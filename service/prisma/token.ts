@@ -1,15 +1,16 @@
 import prisma from "../../config/prisma.js";
 
-export const addTokenByUserId = async ({userId, token, exp}: {userId: string, token: string, exp: Date}) => {
-    const session = await prisma.session_tokens.create({
+export const addTokenByUserId = async ({id, userId, token, exp}: {id: string, userId: string, token: string, exp: Date}) => {
+    const session = await prisma.sessions.create({
         data: {
+            id,
             userId,
             token,
             exp
         }
     })
 
-    prisma.session_tokens.deleteMany({
+    prisma.sessions.deleteMany({
         where: {
             exp: {
                 gt: new Date( Date.now() )

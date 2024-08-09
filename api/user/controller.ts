@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema, userSchemas } from "./schema.js";
 import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
-import { addTokenByUserId } from "../../service/prisma/token.js";
+import { addSession } from "../../service/prisma/token.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 
 export async function testHandler(req: FastifyRequest, res: FastifyReply) {
@@ -38,7 +38,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
     username: user.username,
   })
 
-  await addTokenByUserId({ id:sessionId, userId: user.id, token, exp})
+  await addSession({ id:sessionId, userId: user.id, token, exp})
 
   return res.code(200).send({
     message: 'Login success.',
@@ -69,7 +69,7 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
     username: user.username,
   })
 
-  await addTokenByUserId({ id: sessionId, userId: user.id, token, exp})
+  await addSession({ id: sessionId, userId: user.id, token, exp})
 
   return res.code(201).send({
     message: "User created.",

@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma.js";
 
-export const addTokenByUserId = async ({id, userId, token, exp}: {id: string, userId: string, token: string, exp: Date}) => {
+export const addSession = async ({ id, userId, token, exp }: { id: string, userId: string, token: string, exp: Date }) => {
     const session = await prisma.sessions.create({
         data: {
             id,
@@ -10,13 +10,43 @@ export const addTokenByUserId = async ({id, userId, token, exp}: {id: string, us
         }
     })
 
-    prisma.sessions.deleteMany({
+    // await deleteAllExpiredSession()
+
+    return session;
+}
+
+export const getSession = async ({ id }: { id: string }) => {
+    const session = await prisma.sessions.findUniqueOrThrow({
         where: {
-            exp: {
-                gt: new Date( Date.now() )
-            }
+            id
         }
     })
 
     return session;
+}
+
+export const deleteSessionById = async ({ id }: { id: string }) => {
+    await prisma.sessions.delete({
+        where: {
+            id
+        }
+    })
+}
+
+export const deleteAllSessionByUserId = async ({ userId }: { userId: string }) => {
+    await prisma.sessions.deleteMany({
+        where: {
+            userId
+        }
+    })
+}
+
+export const deleteAllExpiredSession = async () => {
+    await prisma.sessions.deleteMany({
+        where: {
+            exp: {
+                gt: new Date(Date.now())
+            }
+        }
+    })
 }

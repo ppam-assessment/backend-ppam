@@ -58,7 +58,7 @@ model Topics {
 model Instrument {
   id Int @id @default(autoincrement())
   mainId Int?
-  number Int
+  number Int?
   topicId Int
   question String
   type InstrumentType
@@ -75,7 +75,7 @@ model Choices {
   id Int @id @default(autoincrement())
   instrumentId Int
   value String
-  score Int
+  score Int @default(0)
 
   instrument Instrument @relation(fields: [instrumentId], references: [id])
 }

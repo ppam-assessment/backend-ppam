@@ -4,7 +4,7 @@ import { getSessionUser } from "../../service/prisma/session.js";
 import { Status } from "@prisma/client";
 import { addUserResponses, readUserResponses } from "../../service/prisma/response.js";
 
-export async function postUserResponse(req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) {
+export async function postUserResponseController(req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) {
   const session = await req.jwtVerify() as TokenPayload
 
   const { user } = await getSessionUser({ id: session.id })
@@ -35,7 +35,7 @@ export async function postUserResponse(req: FastifyRequest<{ Body: InputResponse
   })
 }
 
-export async function getUserResponses(req: FastifyRequest, res: FastifyReply) {
+export async function getUserResponsesController(req: FastifyRequest, res: FastifyReply) {
   const session = await req.jwtVerify() as TokenPayload
 
   const { user } = await getSessionUser({ id: session.id })

@@ -25,6 +25,19 @@ export const getSession = async ({ id }: { id: string }) => {
     return session;
 }
 
+export const getSessionUser = async ({ id }: { id: string }) => {
+    const session = await prisma.sessions.findUniqueOrThrow({
+        select: {
+            user: true
+        },
+        where: {
+            id
+        }
+    })
+
+    return session;
+}
+
 export const deleteSessionById = async ({ id }: { id: string }) => {
     await prisma.sessions.delete({
         where: {

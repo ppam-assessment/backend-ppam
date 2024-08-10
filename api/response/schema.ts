@@ -1,28 +1,18 @@
 import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
-import { Status } from '@prisma/client'
 
 
-export const createUserSchema = z.object({
-    email: z.string({ required_error: "Email is empty."}),
-    username: z.string({ required_error: "Username is empty."}),
-    password: z.string({ required_error: "Password is empty."}).min(6, "Password minimal 6 karakter."),
-    status: z.nativeEnum(Status)
-}).required()
+export const inputResponse = z.object({
+    userId: z.string().optional(),
+    instrumentId: z.number({ required_error: "Instrument not found."}),
+    value: z.string({ required_error: "Value is empty."}),
+    score: z.number().default(0),
+    comment: z.string().optional(),
 
-export const loginUserSchema = z.object({
-    email: z.string().nullable().optional(),
-    username: z.string().nullable().optional(),
-    password: z.string().min(6, "Password minimal 6 karakter.")
-}).refine( field => field.email || field.username, {
-    message: "Either username or email must be filled.",
-    path: ["email", "username"]
-})
+}).required().array()
 
-export type CreateUserSchema = z.infer<typeof createUserSchema>
-export type LoginUserSchema = z.infer<typeof loginUserSchema>
+export type InputResponseSchema = z.infer<typeof inputResponse>
 
-export const { schemas: userSchemas, $ref } = buildJsonSchemas({
-    createUserSchema,
-    loginUserSchema
+export const { schemas: responseSchemas, $ref } = buildJsonSchemas({
+    inputResponse
 })

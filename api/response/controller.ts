@@ -1,88 +1,34 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import bcrypt from 'bcrypt'
-import { v4 as uuidv4 } from 'uuid';
+import { inputResponse, InputResponseSchema } from "./schema.js";
+import { getSessionUser } from "../../service/prisma/session.js";
+import { Status } from "@prisma/client";
+import { addUserResponses } from "../../service/prisma/response.js";
 
-import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema, userSchemas } from "./schema.js";
-import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
-import { addSession } from "../../service/prisma/token.js";
-import getNextDay from "../../utils/lib/timePeriod.js";
+export async function postUserResponse(req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) {
+      const session = await req.jwtVerify() as TokenPayload
 
-export async function loginController(req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) {
-  loginUserSchema.safeParse(req.body)
-  const { email, username, password } = req.body
-  const exp = await getNextDay()
-  const sessionId = uuidv4();
-  
-  const user = email ?
-    await getUserByEmail({ email })
-    : username ?
-      await getUserByName({ username })
-      : undefined
+    const {user} = await getSessionUser({id: session.id})
+    if (!user) {
+        return Error("User not found.");
+    }else if(user.status !== Status.institute){
+      return Error("User doesn't have access.");
+    }
 
-  const isMatch = user && (await bcrypt.compare(password, user.password))
-  if (!user || !isMatch) {
-    return res.code(401).send({
-      message: 'Invalid email or password.',
-    })
-  }
+  inputResponse.safeParse(req.body)
+  const inputArr = req.body
 
-  const token = req.jwt.sign({
-    id: user.id,
-    username: user.username,
-  })
+  const input = inputArr.map( data => { return {
+    userId: user.id,
+    instrumentId: data.instrumentId,
+    value: data.value,
+    score: data?.score,
+    comment: data.comment
+  }}) as InputResponseSchema
 
-  await addSession({ id:sessionId, userId: user.id, token, exp})
+  const responses = await addUserResponses({data: input})
 
   return res.code(200).send({
-    message: 'Login success.',
-    data: {
-      accessToken: token
-    }
-  }).setCookie('access_token', token, {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    expires: exp
-  })
-}
-
-export async function createUserController(req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) {
-  createUserSchema.safeParse(req.body)
-
-  const { email, username, password, status } = req.body;
-  const id = uuidv4();
-  const sessionId = uuidv4();
-  const hashedPassword = await bcrypt.hash(password, 10)
-  const exp = await getNextDay()
-
-  const user = await createUser({ id, username, email, password: hashedPassword, status})
-
-  const token = req.jwt.sign({
-    id: user.id,
-    username: user.username,
-  })
-
-  await addSession({ id: sessionId, userId: user.id, token, exp})
-
-  return res.code(201).send({
-    message: "User created.",
-    data: {
-      user,
-      accessToken: token
-    }
-  }).setCookie('access_token', token, {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    expires: exp
-  })
-}
-
-export async function logoutController(req: FastifyRequest, res: FastifyReply) {
-  res.setCookie('access_token', 'invalid', {
-    path: '/',
-    httpOnly: true,
-    secure: false,
-    expires: new Date( Date.now() )
+    message: `Data added for ${user.username}.`,
+    data: responses
   })
 }

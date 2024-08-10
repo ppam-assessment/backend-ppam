@@ -2,9 +2,9 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid';
 
-import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema, userSchemas } from "./schema.js";
+import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema } from "./schema.js";
 import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
-import { addSession } from "../../service/prisma/token.js";
+import { addSession } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 
 export async function loginController(req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) {
@@ -29,6 +29,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
   const token = req.jwt.sign({
     id: user.id,
     username: user.username,
+    status: user.status,
   })
 
   await addSession({ id:sessionId, userId: user.id, token, exp})
@@ -60,6 +61,7 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
   const token = req.jwt.sign({
     id: user.id,
     username: user.username,
+    status: user.status,
   })
 
   await addSession({ id: sessionId, userId: user.id, token, exp})
@@ -67,7 +69,6 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
   return res.code(201).send({
     message: "User created.",
     data: {
-      user,
       accessToken: token
     }
   }).setCookie('access_token', token, {

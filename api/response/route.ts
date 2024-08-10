@@ -1,21 +1,13 @@
 import { FastifyInstance } from "fastify";
-import { createUserController, loginController } from "./controller.js";
+import { postUserResponse } from "./controller.js";
 import { $ref } from "./schema.js";
 
 export default function (app: FastifyInstance, opts: any, done: any) {
-  app.post("/login", {
+  app.post("/", {
     schema: {
-      body: $ref('loginUserSchema'),
+      body: $ref('inputResponse'),
     }
-  }, loginController)
-
-  app.post("/register", {
-    schema: {
-      body: $ref('createUserSchema')
-    }
-  }, createUserController)
-
-  app.get("/logout", loginController)
+  }, postUserResponse)
   
   done();
 }

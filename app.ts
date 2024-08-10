@@ -24,7 +24,7 @@ app.addHook('preHandler', (req, res, next) => {
   return next()
 })
 app.register(fCookie, {
-  secret: 'some-secret-key',
+  secret: process.env?.COOKIE_SECRET || 'Veda Bezaleel',
   hook: 'preHandler',
 })
 

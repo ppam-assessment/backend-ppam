@@ -1,5 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getAllInstrument } from "../../service/prisma/instrument.js";
+import { getSession, getSessionUser } from "../../service/prisma/session.js";
+import { error } from "console";
 
 export async function getAllInstrumentController(req: FastifyRequest, res: FastifyReply) {
     const { from, to } = req.query as { from?: string, to?: string };

@@ -44,8 +44,8 @@ export const validateUserRole = async ({ id, status}: {id: string, status: Statu
     })
 
     if (user?.id) {
-        return user;
+        return true;
     } else {
-        return -1
+        return false
     }
 }

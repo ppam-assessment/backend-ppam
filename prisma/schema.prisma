@@ -24,6 +24,7 @@ enum InstrumentType {
   multiselect
   text
   date
+  sub
 }
 
 model Users {
@@ -36,6 +37,7 @@ model Users {
 
   area Areas? @relation(fields: [areaId], references: [id])
   session Sessions[]
+  response Responses[]
 }
 
 model Areas {
@@ -79,10 +81,12 @@ model Choices {
 
 model Responses {
   id Int @id @default(autoincrement())
+  userId String
   instrumentId Int
   value String
 
   instrument Instrument @relation(fields: [instrumentId], references: [id])
+  responder Users @relation(fields: [userId],references: [id])
 }
 
 model Sessions {

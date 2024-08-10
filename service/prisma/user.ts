@@ -34,3 +34,18 @@ export const createUser = async ({ id, username, email, password, status = Statu
 
     return user;
 }
+
+export const validateUserRole = async ({ id, status}: {id: string, status: Status}) => {
+    const user = await prisma.users.findFirstOrThrow({
+        where: {
+            id,
+            status
+        }
+    })
+
+    if (user?.id) {
+        return user;
+    } else {
+        return -1
+    }
+}

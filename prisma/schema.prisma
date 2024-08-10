@@ -86,7 +86,7 @@ model Responses {
   instrumentId Int
   value String
   score Int
-  comment String
+  comment String?
 
   instrument Instrument @relation(fields: [instrumentId], references: [id])
   responder Users @relation(fields: [userId],references: [id])

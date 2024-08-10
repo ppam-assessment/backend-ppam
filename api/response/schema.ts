@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
 
 
-export const inputResponse = z.object({
+export const inputResponseSchema = z.object({
     userId: z.string().optional(),
     instrumentId: z.number({ required_error: "Instrument not found."}),
     value: z.string({ required_error: "Value is empty."}),
@@ -11,8 +11,8 @@ export const inputResponse = z.object({
 
 }).required().array()
 
-export type InputResponseSchema = z.infer<typeof inputResponse>
+export type InputResponseSchema = z.infer<typeof inputResponseSchema>
 
 export const { schemas: responseSchemas, $ref } = buildJsonSchemas({
-    inputResponse
-})
+    inputResponseSchema
+}, { $id: 'responseSchema' })

@@ -6,7 +6,7 @@ export default function (app: FastifyInstance, opts: any, done: any) {
   app.get("/", getUserResponsesController)
   app.post("/", {
     schema: {
-      body: $ref('inputResponse'),
+      body: $ref('inputResponseSchema'),
     }
   }, postUserResponseController)
 

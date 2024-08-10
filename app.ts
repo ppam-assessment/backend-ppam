@@ -7,6 +7,7 @@ import fCookie from '@fastify/cookie'
 
 import routes from './api/index.js'
 import { userSchemas } from './api/user/schema.js'
+import { responseSchemas } from './api/response/schema.js'
 
 const app = Fastify({
   logger: true
@@ -29,6 +30,9 @@ app.register(fCookie, {
 })
 
 for(let schema of [...userSchemas]) {
+  app.addSchema(schema)
+}
+for(let schema of [...responseSchemas]) {
   app.addSchema(schema)
 }
 

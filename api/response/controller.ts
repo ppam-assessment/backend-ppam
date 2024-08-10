@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { inputResponse, InputResponseSchema } from "./schema.js";
+import {  inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { Status } from "@prisma/client";
 import { addUserResponses, readUserResponses } from "../../service/prisma/response.js";
@@ -14,7 +14,7 @@ export async function postUserResponseController(req: FastifyRequest<{ Body: Inp
     return Error("User doesn't have access.");
   }
 
-  inputResponse.safeParse(req.body)
+  inputResponseSchema.safeParse(req.body)
   const inputArr = req.body
 
   const input = inputArr.map(data => {
@@ -22,10 +22,16 @@ export async function postUserResponseController(req: FastifyRequest<{ Body: Inp
       userId: user.id,
       instrumentId: data.instrumentId,
       value: data.value,
-      score: data?.score,
+      score: data.score,
       comment: data.comment
-    }
-  }) as InputResponseSchema
+    };
+  }) as {
+    userId: string,
+    instrumentId: number,
+    value: string,
+    score: number,
+    comment: string
+  }[]
 
   const responses = await addUserResponses({ data: input })
 

@@ -81,7 +81,7 @@ model Choices {
 }
 
 model Responses {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   userId String
   instrumentId Int
   value String

@@ -20,8 +20,10 @@ enum Status {
 }
 
 enum InstrumentType {
-  select
-  multiselect
+  dropdown
+  dropdownya
+  dropdownideal
+  checkbox
   text
   date
   sub

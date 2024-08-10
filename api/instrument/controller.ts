@@ -8,61 +8,80 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
     const fromNumber = from ? parseInt(from, 10) : undefined;
     const toNumber = to ? parseInt(to, 10) : undefined;
 
+    const choiceya = [
+        {
+            value: 'Ideal',
+            code: 1
+        },
+        {
+            value: 'Minimal Diperlukan',
+            code: 2
+        },
+        {
+            value: 'Tidak Memadai',
+            code: 3
+        },
+    ]
+    const choiceideal = [
+        {
+            value: 'Ideal',
+            code: 1
+        },
+        {
+            value: 'Minimal Diperlukan',
+            code: 2
+        },
+        {
+            value: 'Tidak Memadai',
+            code: 3
+        },
+    ]
+
     const instruments = await getAllInstrument({ from: fromNumber, to: toNumber });
     const result = instruments.map(instrument => {
         const { id, number, topicId, question, choice, sub } = instrument;
-        let {type} = instrument;
+        let { type } = instrument;
         let caseShape = {};
         switch (type) {
-            case 'select':
-            case 'selectya':
+            case 'dropdown':
+            case 'dropdownya':
                 caseShape = {
-                    choice: [
-                        {
-                            value: 'Ya',
-                            code: 1
-                        },
-                        {
-                            value: 'Tidak',
-                            code: 2
-                        },
-                        {
-                            value: 'Tidak Tahu',
-                            code: 3
-                        },
-                    ]
+                    choice: choiceya
                 }
-                type = 'select'
+                type = 'dropdown'
                 break;
 
-            case 'selectideal':
+            case 'dropdownideal':
                 caseShape = {
-                    choice: [
-                        {
-                            value: 'Ideal',
-                            code: 1
-                        },
-                        {
-                            value: 'Minimal Diperlukan',
-                            code: 2
-                        },
-                        {
-                            value: 'Tidak Memadai',
-                            code: 3
-                        },
-                    ]
+                    choice: choiceideal
                 }
-                type = 'select'
+                type = 'dropdown'
                 break;
 
-            case 'multiselect':
+            case 'checkbox':
                 caseShape = {
                     choice
                 }
                 break;
             case 'sub':
                 caseShape = {
-                    sub
+                    sub: sub.map(item => {
+                        const { id, question, type } = item
+                        const isDropdown = type.includes('dropdown')
+                        let choice = undefined
+
+                        if (type === 'dropdownya') {
+                            choice = choiceya
+                        } else if (type === 'dropdownideal') {
+                            choice = choiceideal
+                        }
+                        return {
+                            id: item.id,
+                            question: item.question,
+                            type: isDropdown ? 'dropdown' : item.type,
+                            choice
+                        }
+                    })
                 }
                 break;
 

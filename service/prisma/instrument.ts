@@ -33,7 +33,6 @@ export const getAllInstrument = async ({from, to}: {from: number | undefined, to
             },
             choice: {
                 select: {
-                    id: true,
                     value: true
                 }
             }

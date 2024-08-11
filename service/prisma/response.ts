@@ -16,11 +16,16 @@ export const addUserResponses = async ({ data }: {
     return responses;
 }
 
-export const readUserResponses = async ({userId}: {userId: string}) => {
+export const readUserResponses = async ({ userId, topicId }: { userId: string, topicId: number | undefined }) => {
+    const whereCondition = topicId ? {
+        userId,
+        topicId
+    } : {
+        userId
+    }
+
     const responses = await prisma.responses.findMany({
-        where: {
-            userId
-        },
+        where: whereCondition,
         select: {
             instrument: {
                 select: {

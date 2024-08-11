@@ -51,8 +51,12 @@ export async function getUserResponsesController(req: FastifyRequest, res: Fasti
     return Error("User doesn't have access.");
   }
 
+  const { topic } = req.query as { topic?: string };
+  const topicId = topic ? parseInt(topic, 10) : undefined;
 
-  const responses = await readUserResponses({userId: user.id})
+
+
+  const responses = await readUserResponses({ userId: user.id, topicId })
 
   return res.code(200).send({
     message: `Data added for ${user.username}.`,

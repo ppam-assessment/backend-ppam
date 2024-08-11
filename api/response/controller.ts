@@ -6,8 +6,11 @@ import { addUserResponses, readUserResponses } from "../../service/prisma/respon
 
 export async function postUserResponseController(req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) {
   const session = await req.jwtVerify() as TokenPayload
+  // return res.send({session})
 
   const { user } = await getSessionUser({ id: session.id })
+  // console.log(`\n\nlog: ${session.id}\n\n`)
+
   if (!user) {
     return Error("User not found.");
   } else if (user.status !== Status.institute) {

@@ -9,7 +9,7 @@ export const inputResponseSchema = z.object({
     score: z.number().default(0),
     comment: z.string().optional(),
 
-}).required().array()
+}).array()
 
 export type InputResponseSchema = z.infer<typeof inputResponseSchema>
 

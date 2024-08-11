@@ -27,7 +27,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
   }
 
   const token = req.jwt.sign({
-    id: user.id,
+    id: sessionId,
     username: user.username,
     institute: user?.institute || undefined,
     status: user.status,
@@ -60,7 +60,7 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
   const user = await createUser({ id, username, institute, email, password: hashedPassword, status})
 
   const token = req.jwt.sign({
-    id: user.id,
+    id: sessionId,
     username: user.username,
     institute: user?.institute || undefined,
     status: user.status,

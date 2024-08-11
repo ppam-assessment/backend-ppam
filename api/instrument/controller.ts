@@ -32,7 +32,7 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
 
             case 'checkbox':
                 caseShape = {
-                    choiceCheck
+                    choice: choiceCheck
                 }
                 break;
             case 'sub':

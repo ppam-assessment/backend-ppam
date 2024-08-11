@@ -23,7 +23,7 @@ await app.register(fastifyExpress)
 await app.register(fjwt, { secret: process.env?.JWT_SECRET || 'Veda Bezaleel' })
 await app.register(cors, { 
   // put your options here
-  origin: false
+  origin: '*'
 })
 
 app.addHook('preHandler', (req, res, next) => {

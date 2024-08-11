@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --env-file=.env app.js",
-    "start-dev": "npx tsx --env-file=.env app.ts",
+    "start": "node app.js",
+    "start-dev": "npx tsx app.ts",
     "prisma-client": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "seed": "npx prisma db seed",

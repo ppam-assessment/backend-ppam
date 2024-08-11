@@ -6,6 +6,8 @@ import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fCookie from '@fastify/cookie'
 import cors from '@fastify/cors'
 
+import 'dotenv/config'
+
 import routes from './api/index.js'
 import { userSchemas } from './api/user/schema.js'
 import { responseSchemas } from './api/response/schema.js'

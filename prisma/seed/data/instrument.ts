@@ -48,22 +48,6 @@ function createSubCheck(topicId: number, ...questions: Array<string>) {
   }
 }
 
-function createSubText(topicId: number, ...questions: Array<string>) {
-  const subQuestions = questions.map( question => {
-    return {
-      topicId,
-      question,
-      type: InstrumentType.text
-    }
-  })
-
-  return {
-    createMany: {
-      data: subQuestions
-    }
-  }
-}
-
 export default [
   { number: 1, topicId: 1, question: "Apakah negara Anda mempunyai Kebijakan dan/atau Program Kesiapsiagaan dan/atau Tanggap Darurat Nasional? Jika ya, silakan tentukan dan sebutkan di kotak komentar jenis keadaan darurat yang dicakupnya (misalnya bencana alam, konflik, keadaan darurat kesehatan masyarakat, dll.)", type: InstrumentType.dropdownya },
   { number: 2, topicId: 1, question: "Apakah negara Anda mempunyai Program Kesiapsiagaan Kesehatan Nasional dan/atau Tanggap Darurat? Jika ya, harap sebutkan", type: InstrumentType.dropdownya },
@@ -137,5 +121,5 @@ export default [
   { number: 70, topicId: 13, question: "Apakah ada sistem rujukan yang jelas yang dapat dimanfaatkan dalam keadaan darurat? Jika ya, harap sebutkan", type: InstrumentType.dropdownya },
   { number: 71, topicId: 13, question: "Apakah ada materi KIE yang menguraikan jenis-jenis layanan yang tersedia yang dapat dimanfaatkan dalam keadaan darurat, dan di mana tersedianya?", type: InstrumentType.dropdownya },
   { number: 72, topicId: 13, question: "Fasilitas kesehatan tingkat manakah yang dapat menyediakan layanan aborsi berikut di wilayah yang dipilih? (Pertimbangkan level terendah)", type: InstrumentType.sub, sub: createSubCheck(13, 'Aborsi obat', 'Aspirasi vakum, dilatasi dan evakuasi', 'Prosedur induksi sesuai anjuran WHO') },
-  { number: 73, topicId: 13, question: "Berdasarkan layanan di atas, bagaimana Anda menilai struktur dan layanan medis yang menyediakan layanan aborsi aman di lokasi Anda sehubungan dengan elemen berikut:",  type: createSubIdeal(13, 'Tenaga Medis yang Berkualitas (misalnya, terlatih dalam prosedur medis, klarifikasi nilai-nilai aborsi dan transformasi sikap)', 'Fasilitas (misalnya, Klinik, hotline, dll.)', 'Persediaan/peralatan')},
+  { number: 73, topicId: 13, question: "Berdasarkan layanan di atas, bagaimana Anda menilai struktur dan layanan medis yang menyediakan layanan aborsi aman di lokasi Anda sehubungan dengan elemen berikut:",  type: InstrumentType.sub, sub: createSubIdeal(13, 'Tenaga Medis yang Berkualitas (misalnya, terlatih dalam prosedur medis, klarifikasi nilai-nilai aborsi dan transformasi sikap)', 'Fasilitas (misalnya, Klinik, hotline, dll.)', 'Persediaan/peralatan')},
 ]

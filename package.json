@@ -7,7 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx tsx --env-file=.env app.ts",
-    "prisma-client": "npx prisma generate"
+    "prisma-client": "npx prisma generate",
+    "migrate": "npx prisma migrate dev",
+    "seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",

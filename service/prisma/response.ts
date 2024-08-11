@@ -30,6 +30,7 @@ export const readUserResponses = async ({ userId, topicId }: { userId: string, t
             instrument: {
                 select: {
                     id: true,
+                    topicId: true,
                     question: true,
                     type: true
                 }

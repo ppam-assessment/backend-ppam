@@ -23,12 +23,12 @@ export const getAllInstrument = async ({from, to}: {from: number | undefined, to
                     id: true,
                     question: true,
                     type: true,
-                    choice: {
-                        select: {
-                            // id: true,
-                            value: true // split by %2$
-                        }
-                    }
+                    // choice: {
+                    //     select: {
+                    //         // id: true,
+                    //         value: true // split by %2$
+                    //     }
+                    // }
                 }
             },
             choice: {

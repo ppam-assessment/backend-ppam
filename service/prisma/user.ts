@@ -21,11 +21,12 @@ export const getUserByName = async ({ username }: { username: string }) => {
     return user;
 }
 
-export const createUser = async ({ id, username, email, password, status = Status.viewer }: { id: string, username: string, email: string, password: string, status: Status }) => {
+export const createUser = async ({ id, username,  institute, email, password, status = Status.viewer }: { id: string, username: string, institute: string | undefined , email: string, password: string, status: Status }) => {
     const user = await prisma.users.create({
         data: {
             id,
             username,
+            institute,
             email,
             password,
             status

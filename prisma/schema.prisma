@@ -33,6 +33,7 @@ model Users {
   id String @id
   areaId Int?
   username String
+  institute String?
   password String
   email String
   status Status

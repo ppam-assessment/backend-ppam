@@ -6,6 +6,7 @@ import { Status } from '@prisma/client'
 export const createUserSchema = z.object({
     email: z.string({ required_error: "Email is empty." }),
     username: z.string({ required_error: "Username is empty." }),
+    institute: z.string().optional(),
     password: z.string({ required_error: "Password is empty." }).min(6, "Password minimal 6 karakter."),
     status: z.nativeEnum(Status)
 }).required()

@@ -29,6 +29,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
   const token = req.jwt.sign({
     id: user.id,
     username: user.username,
+    institute: user?.institute || undefined,
     status: user.status,
   })
 
@@ -50,17 +51,18 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
 export async function createUserController(req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) {
   createUserSchema.safeParse(req.body)
 
-  const { email, username, password, status } = req.body;
+  const { email, username, password, status, institute } = req.body;
   const id = uuidv4();
   const sessionId = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10)
   const exp = await getNextDay()
 
-  const user = await createUser({ id, username, email, password: hashedPassword, status})
+  const user = await createUser({ id, username, institute, email, password: hashedPassword, status})
 
   const token = req.jwt.sign({
     id: user.id,
     username: user.username,
+    institute: user?.institute || undefined,
     status: user.status,
   })
 

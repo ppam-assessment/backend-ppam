@@ -4,6 +4,7 @@ import Fastify from 'fastify'
 import fastifyExpress from '@fastify/express'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fCookie from '@fastify/cookie'
+import cors from '@fastify/cors'
 
 import routes from './api/index.js'
 import { userSchemas } from './api/user/schema.js'
@@ -18,6 +19,10 @@ app.register(routes, { prefix: '/' })
 
 await app.register(fastifyExpress)
 await app.register(fjwt, { secret: process.env?.JWT_SECRET || 'Veda Bezaleel' })
+await app.register(cors, { 
+  // put your options here
+  origin: false
+})
 
 app.addHook('preHandler', (req, res, next) => {
   // here we are

@@ -11,7 +11,7 @@
     "prisma-client": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "seed": "npx prisma db seed",
-    "compile": "tsc app.ts"
+    "compile": "tsc --module NodeNext"
   },
   "keywords": [],
   "author": "",

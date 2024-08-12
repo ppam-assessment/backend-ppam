@@ -29,16 +29,20 @@ enum InstrumentType {
   sub
 }
 
+enum AreaTye {
+  national
+  subnational
+}
+
 model Users {
   id String @id
-  areaId Int?
   username String
   institute String?
   password String
   email String
   status Status
 
-  area Areas? @relation(fields: [areaId], references: [id])
+  // area Areas? @relation(fields: [areaId], references: [id])
   session Sessions[]
   response Responses[]
 }
@@ -46,8 +50,9 @@ model Users {
 model Areas {
   id Int @id @default(autoincrement())
   name String
+  type AreaTye
 
-  user Users[]
+  // user Users[]
 }
 
 model Topics {
@@ -57,6 +62,10 @@ model Topics {
 
   instrument Instrument[]
 }
+
+// model General {
+
+// }
 
 model Instrument {
   id Int @id @default(autoincrement())

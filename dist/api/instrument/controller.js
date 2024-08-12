@@ -25,7 +25,7 @@ export async function getAllInstrumentController(req, res) {
                 break;
             case 'checkbox':
                 caseShape = {
-                    choiceCheck
+                    choice: choiceCheck
                 };
                 break;
             case 'sub':

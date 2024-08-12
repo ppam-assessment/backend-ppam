@@ -2,7 +2,6 @@ import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
 import { Status } from '@prisma/client'
 
-
 export const createUserSchema = z.object({
     email: z.string({ required_error: "Email is empty." }),
     username: z.string({ required_error: "Username is empty." }),

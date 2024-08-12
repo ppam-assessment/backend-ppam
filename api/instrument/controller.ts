@@ -3,6 +3,7 @@ import { getAllInstrument } from "../../service/prisma/instrument.js";
 import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js"
 import { getSession, getSessionUser } from "../../service/prisma/session.js";
 import { error } from "console";
+import { readAreaChoices } from "../../service/prisma/area.js";
 
 export async function getAllInstrumentController(req: FastifyRequest, res: FastifyReply) {
     const { from, to } = req.query as { from?: string, to?: string };
@@ -71,5 +72,13 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
     res.code(200).send({
         message: 'Success.',
         data: result
+    })
+}
+
+export async function getAreaController(req: FastifyRequest, res: FastifyReply) {
+    const areaChoice = await readAreaChoices()
+
+    return res.code(200).send({
+        data: areaChoice
     })
 }

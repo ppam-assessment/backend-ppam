@@ -1,12 +1,12 @@
 import prisma from "../../config/prisma.js";
 export const getAllInstrument = async ({ from, to }) => {
-    const whereCondition = {};
-    if (from !== null && to !== null) {
-        whereCondition.number = {
+    const whereCondition = {
+        number: {
+            not: null,
             gte: from,
             lte: to
-        };
-    }
+        },
+    };
     const instrument = await prisma.instrument.findMany({
         where: whereCondition,
         select: {

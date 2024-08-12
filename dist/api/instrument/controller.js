@@ -1,12 +1,13 @@
 import { getAllInstrument } from "../../service/prisma/instrument.js";
 import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js";
+import { readAreaChoices } from "../../service/prisma/area.js";
 export async function getAllInstrumentController(req, res) {
     const { from, to } = req.query;
     const fromNumber = from ? parseInt(from, 10) : undefined;
     const toNumber = to ? parseInt(to, 10) : undefined;
     const instruments = await getAllInstrument({ from: fromNumber, to: toNumber });
     const result = instruments.map(instrument => {
-        const { id, number, topicId, question, sub } = instrument;
+        const { id, number, topicId, question, sub, choice } = instrument;
         let { type } = instrument;
         let caseShape = {};
         switch (type) {
@@ -60,5 +61,11 @@ export async function getAllInstrumentController(req, res) {
     res.code(200).send({
         message: 'Success.',
         data: result
+    });
+}
+export async function getAreaController(req, res) {
+    const areaChoice = await readAreaChoices();
+    return res.code(200).send({
+        data: areaChoice
     });
 }

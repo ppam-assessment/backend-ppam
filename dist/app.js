@@ -38,7 +38,7 @@ for (let schema of [...responseSchemas]) {
 }
 // Run the server!
 try {
-    await app.listen({ port: 3001 });
+    await app.listen({ port: 3000, host: '0.0.0.0' });
 }
 catch (err) {
     app.log.error(err);

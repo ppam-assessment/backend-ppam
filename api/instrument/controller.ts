@@ -19,21 +19,21 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
             case 'dropdown':
             case 'dropdownya':
                 caseShape = {
-                    choice
+                    choice: choiceYa
                 }
                 type = 'dropdown'
                 break;
 
             case 'dropdownideal':
                 caseShape = {
-                    choice
+                    choice: choiceIdeal
                 }
                 type = 'dropdown'
                 break;
 
             case 'checkbox':
                 caseShape = {
-                    choice
+                    choice: choiceCheck
                 }
                 break;
             case 'sub':
@@ -44,11 +44,11 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
                         let choice = undefined
 
                         if (type === 'dropdownya') {
-                            choice
+                            choice = choiceYa
                         } else if (type === 'dropdownideal') {
-                            choice
+                            choice = choiceIdeal
                         } else if ( type === 'checkbox' ) {
-                            choice
+                            choice = choiceCheck
                         }
                         return {
                             id: item.id,

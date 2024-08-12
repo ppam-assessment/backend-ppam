@@ -10,13 +10,6 @@ export const getAllInstrument = async ({from, to}: {from: number | undefined, to
         
     };
 
-    // if (from !== null && to !== null) {
-    //     whereCondition.number = {
-    //         gte: from,
-    //         lte: to
-    //     };
-    // }
-
     const instrument = await prisma.instrument.findMany({
         where: whereCondition,
         select: {

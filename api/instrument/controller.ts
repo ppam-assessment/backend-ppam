@@ -12,28 +12,28 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
 
     const instruments = await getAllInstrument({ from: fromNumber, to: toNumber });
     const result = instruments.map(instrument => {
-        const { id, number, topicId, question, sub } = instrument;
+        const { id, number, topicId, question, sub, choice } = instrument;
         let { type } = instrument;
         let caseShape = {};
         switch (type) {
             case 'dropdown':
             case 'dropdownya':
                 caseShape = {
-                    choice: choiceYa
+                    choice
                 }
                 type = 'dropdown'
                 break;
 
             case 'dropdownideal':
                 caseShape = {
-                    choice: choiceIdeal
+                    choice
                 }
                 type = 'dropdown'
                 break;
 
             case 'checkbox':
                 caseShape = {
-                    choice: choiceCheck
+                    choice
                 }
                 break;
             case 'sub':
@@ -44,11 +44,11 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
                         let choice = undefined
 
                         if (type === 'dropdownya') {
-                            choice = choiceYa
+                            choice
                         } else if (type === 'dropdownideal') {
-                            choice = choiceIdeal
+                            choice
                         } else if ( type === 'checkbox' ) {
-                            choice = choiceCheck
+                            choice
                         }
                         return {
                             id: item.id,

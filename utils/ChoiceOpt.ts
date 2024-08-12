@@ -1,14 +1,14 @@
 export const choiceYa = [
     {
-        value: 'Ideal',
+        value: 'Ya',
         code: 1
     },
     {
-        value: 'Minimal Diperlukan',
+        value: 'Tidak',
         code: 2
     },
     {
-        value: 'Tidak Memadai',
+        value: 'Tidak Tahu',
         code: 3
     },
 ]

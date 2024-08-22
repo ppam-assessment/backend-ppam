@@ -4,9 +4,9 @@ import instruments from "./data/instrument.js"
 
 async function main() {
 
-  await prisma.topics.createMany({
-    data: topics
-  })
+  // await prisma.topics.createMany({
+  //   data: topics
+  // })
 
   for (const instrument of instruments) {
     await prisma.instrument.create({

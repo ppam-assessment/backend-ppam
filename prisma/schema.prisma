@@ -15,7 +15,7 @@ datasource db {
 
 enum Status {
   admin
-  institute
+  submitter
   viewer
 }
 
@@ -29,9 +29,9 @@ enum InstrumentType {
   sub
 }
 
-enum AreaTye {
-  national
-  subnational
+enum AreaType {
+  nasional
+  subnasional
 }
 
 model Users {
@@ -50,7 +50,7 @@ model Users {
 model Areas {
   id Int @id @default(autoincrement())
   name String
-  type AreaTye
+  type AreaType
 
   // user Users[]
 }
@@ -63,9 +63,10 @@ model Topics {
   instrument Instrument[]
 }
 
-// model General {
+model General {
+  id Int @id @default(autoincrement())
 
-// }
+}
 
 model Instrument {
   id Int @id @default(autoincrement())
@@ -76,20 +77,10 @@ model Instrument {
   type InstrumentType
 
   topic Topics @relation(fields: [topicId], references: [id])
-  choice Choices[]
   respons Responses[]
 
   sub Instrument[] @relation("SubInstrument")
   main Instrument? @relation("SubInstrument", fields: [mainId], references: [id])
-}
-
-model Choices {
-  id Int @id @default(autoincrement())
-  instrumentId Int
-  value String
-  score Int @default(0)
-
-  instrument Instrument @relation(fields: [instrumentId], references: [id])
 }
 
 model Responses {

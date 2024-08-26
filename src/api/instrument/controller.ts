@@ -13,7 +13,7 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
 
     const instruments = await getAllInstrument({ from: fromNumber, to: toNumber });
     const result = instruments.map(instrument => {
-        const { id, number, topicId, question, sub, choice } = instrument;
+        const { id, number, topicId, question, sub } = instrument;
         let { type } = instrument;
         let caseShape = {};
         switch (type) {

@@ -109,8 +109,6 @@
     "esm": true
   },
   "include": [
-    "./package.json",
     "./src",
-    ".env"
   ]
 }

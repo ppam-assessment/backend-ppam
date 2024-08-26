@@ -11,7 +11,7 @@
     "prisma-client": "prisma generate --generator client",
     "migrate": "npx prisma migrate dev",
     "seed": "prisma db seed",
-    "compile": "tsc && prisma generate --generator cloudlinux",
+    "compile": "tsc",
     "postinstall": "prisma generate"
   },
   "keywords": [],

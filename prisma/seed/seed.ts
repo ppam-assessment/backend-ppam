@@ -10,9 +10,6 @@ async function main() {
 
   for (const instrument of instruments) {
     await prisma.instrument.create({
-      include: {
-        choice: true
-      },
       data: instrument,
     })
   }

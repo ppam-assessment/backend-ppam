@@ -25,11 +25,6 @@ export const getAllInstrument = async ({from, to}: {from: number | undefined, to
                     type: true,
                 }
             },
-            choice: {
-                select: {
-                    value: true
-                }
-            }
         },
         orderBy: {
             number: 'asc'

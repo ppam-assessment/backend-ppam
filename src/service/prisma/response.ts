@@ -62,11 +62,11 @@ export const readUserResponses = async ({ userId, topicId }: { userId: string, t
                     // }
                 }
             },
-            choice: {
-                select: {
-                    value: true
-                }
-            }
+            // choice: {
+            //     select: {
+            //         value: true
+            //     }
+            // }
         },
         orderBy: {
             number: 'asc'

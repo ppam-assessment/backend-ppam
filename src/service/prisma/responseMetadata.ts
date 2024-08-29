@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma.js"
 
-export const getAllResponseMetadata = async () => {
+export const readAllResponseMetadata = async () => {
     const listResponse = await prisma.responseMetadata.findMany({
         select: {
             id: true,
@@ -16,4 +16,17 @@ export const getAllResponseMetadata = async () => {
     });
 
     return listResponse;
+}
+
+export const readUserIdByMetadataId = async({metaId}: {metaId: number}) => {
+    const userId = await prisma.responseMetadata.findFirstOrThrow({
+        where: {
+            id: metaId,
+        },
+        select: {
+            userId: true
+        }
+    })
+
+    return userId;
 }

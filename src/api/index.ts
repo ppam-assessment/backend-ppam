@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import userRoutes from "./user/route.js";
+import userRoutes from "./account/route.js";
 import instrumentRoutes from "./instrument/route.js"
 import responseRoutes from "./response/route.js"
 

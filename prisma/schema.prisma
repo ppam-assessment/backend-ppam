@@ -42,9 +42,9 @@ model Users {
   email String
   status Status
 
-  // area Areas? @relation(fields: [areaId], references: [id])
   session Sessions[]
   response Responses[]
+  metadata ResponseMetadata?
 }
 
 model Areas {
@@ -52,7 +52,7 @@ model Areas {
   name String
   type AreaType
 
-  // user Users[]
+  response ResponseMetadata[]
 }
 
 model Topics {
@@ -63,9 +63,16 @@ model Topics {
   instrument Instrument[]
 }
 
-model General {
+model ResponseMetadata {
   id Int @id @default(autoincrement())
+  areaId Int @unique
+  userId String @unique
+  leader String
+  date DateTime @default(now())
+  participants String
 
+  responder Users @relation(fields: [userId],references: [id])
+  area Areas @relation(fields: [areaId], references: [id])
 }
 
 model Instrument {

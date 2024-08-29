@@ -119,9 +119,10 @@ model Sessions {
 }
 
 model ViewerAccess {
-  id String @id
+  id Int @id @default(autoincrement())
+  userId String @unique
   status accessStatus @default(pending)
   date DateTime @default(now())
 
-  viewer Users @relation(fields: [id], references: [id])
+  viewer Users @relation(fields: [userId], references: [id])
 }

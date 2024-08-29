@@ -50,3 +50,13 @@ export const validateUserRole = async ({ id, status}: {id: string, status: Statu
         return false
     }
 }
+
+export const createViewerAccess = async ({userId}: {userId: string}) => {
+    const access = await prisma.viewerAccess.create({
+        data: {
+            id: userId
+        }
+    })
+
+    return access;
+}

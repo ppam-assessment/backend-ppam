@@ -6,7 +6,7 @@ import { error } from "console";
 import { readAreaChoices } from "../../service/prisma/area.js";
 import { AreaType } from "@prisma/client";
 
-export async function getAllInstrumentController(req: FastifyRequest, res: FastifyReply) {
+export const getAllInstrumentController = async (req: FastifyRequest, res: FastifyReply) => {
     const { from, to } = req.query as { from?: string, to?: string };
     const fromNumber = from ? parseInt(from, 10) : undefined;
     const toNumber = to ? parseInt(to, 10) : undefined;
@@ -76,8 +76,7 @@ export async function getAllInstrumentController(req: FastifyRequest, res: Fasti
     })
 }
 
-export async function getAreaController(req: FastifyRequest, res: FastifyReply) {
-
+export const getAreaController = async (req: FastifyRequest, res: FastifyReply) => {
     const areaChoice = await readAreaChoices();
     const groupedArea = areaChoice.reduce((acc, curr) => {
         curr.type === AreaType.nasional ? acc['Nasional'].push(curr.name) : acc['Subnasional'].push(curr.name)

@@ -4,7 +4,7 @@ import { getSessionUser } from "../../service/prisma/session.js";
 import { InstrumentType, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 
-export async function postUserResponseController(req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) {
+export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
 
   const { user } = await getSessionUser({ id: session.id })
@@ -48,7 +48,7 @@ export async function postUserResponseController(req: FastifyRequest<{ Body: Inp
   })
 }
 
-export async function getUserResponsesController(req: FastifyRequest, res: FastifyReply) {
+export const getUserResponsesController = async (req: FastifyRequest, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
 
   const { user } = await getSessionUser({ id: session.id })
@@ -60,8 +60,6 @@ export async function getUserResponsesController(req: FastifyRequest, res: Fasti
 
   const { topic } = req.query as { topic?: string };
   const topicId = topic ? parseInt(topic, 10) : undefined;
-
-// hvhfdcyue
 
   const responses = (await readUserResponses({ userId: user.id, topicId })).map( item => {
     return {
@@ -85,4 +83,12 @@ export async function getUserResponsesController(req: FastifyRequest, res: Fasti
     message: `Data added for ${user.username}.`,
     data: responses
   })
+}
+
+export const getAllResponse = async (req: FastifyRequest, res: FastifyReply) => {
+  // Validasi Akses
+
+  // Query get all
+
+  // Response
 }

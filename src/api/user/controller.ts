@@ -7,7 +7,7 @@ import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/
 import { addSession } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 
-export async function loginController(req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) {
+export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) => {
   loginUserSchema.safeParse(req.body)
   const { email, username, password } = req.body
   const exp = await getNextDay()
@@ -48,7 +48,7 @@ export async function loginController(req: FastifyRequest<{ Body: LoginUserSchem
   })
 }
 
-export async function createUserController(req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) {
+export const createUserController = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   createUserSchema.safeParse(req.body)
 
   const { email, username, password, status, institute } = req.body;
@@ -81,7 +81,7 @@ export async function createUserController(req: FastifyRequest<{ Body: CreateUse
   })
 }
 
-export async function logoutController(req: FastifyRequest, res: FastifyReply) {
+export const logoutController = async(req: FastifyRequest, res: FastifyReply) => {
   res.setCookie('access_token', 'invalid', {
     path: '/',
     httpOnly: true,

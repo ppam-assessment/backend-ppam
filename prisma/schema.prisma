@@ -122,7 +122,7 @@ model ViewerAccess {
   id Int @id @default(autoincrement())
   userId String @unique
   status accessStatus @default(pending)
-  date DateTime @default(now())
+  date DateTime @default(now()) @updatedAt
 
   viewer Users @relation(fields: [userId], references: [id])
 }

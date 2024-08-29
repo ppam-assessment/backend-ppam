@@ -35,6 +35,11 @@ enum AreaType {
   subnasional
 }
 
+enum accessStatus {
+  pending
+  approved
+}
+
 model Users {
   id String @id
   username String
@@ -46,6 +51,7 @@ model Users {
   session Sessions[]
   response Responses[]
   metadata ResponseMetadata?
+  viewerAccess ViewerAccess?
 }
 
 model Areas {
@@ -110,4 +116,12 @@ model Sessions {
   exp DateTime
 
   user Users @relation(fields: [userId], references: [id])
+}
+
+model ViewerAccess {
+  id String @id
+  status accessStatus
+  date DateTime @default(now())
+
+  viewer Users @relation(fields: [id], references: [id])
 }

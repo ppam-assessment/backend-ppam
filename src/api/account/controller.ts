@@ -91,7 +91,7 @@ export const logoutController = async(req: FastifyRequest, res: FastifyReply) =>
   })
 }
 
-export const createViewerAccessController = async(req: FastifyRequest, res: FastifyReply) => {
+export const postViewerAccessController = async(req: FastifyRequest, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
   const { user } = await getSessionUser({ id: session.id })
 

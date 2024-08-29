@@ -120,7 +120,7 @@ model Sessions {
 
 model ViewerAccess {
   id String @id
-  status accessStatus
+  status accessStatus @default(pending)
   date DateTime @default(now())
 
   viewer Users @relation(fields: [id], references: [id])

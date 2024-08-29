@@ -16,7 +16,9 @@ datasource db {
 enum Status {
   admin
   submitter
+  restrictedViewer
   viewer
+  blocked
 }
 
 enum InstrumentType {

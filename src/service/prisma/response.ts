@@ -54,19 +54,8 @@ export const readUserResponses = async ({ userId, topicId }: { userId: string, t
                             comment: true
                         }
                     }
-                    // choice: {
-                    //     select: {
-                    //         // id: true,
-                    //         value: true // split by %2$
-                    //     }
-                    // }
                 }
             },
-            // choice: {
-            //     select: {
-            //         value: true
-            //     }
-            // }
         },
         orderBy: {
             number: 'asc'

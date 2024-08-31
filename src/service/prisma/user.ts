@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import { accessStatus, Status } from "@prisma/client";
 import prisma from "../../config/prisma.js";
 
 export const getUserByEmail = async ({ email }: { email: string }) => {
@@ -54,7 +54,20 @@ export const validateUserRole = async ({ id, status}: {id: string, status: Statu
 export const createViewerAccess = async ({userId}: {userId: string}) => {
     const access = await prisma.viewerAccess.create({
         data: {
-            id: userId
+            userId
+        }
+    })
+
+    return access;
+}
+
+export const changeViewerAccess = async ({accessId, status}: {accessId: number, status: accessStatus}) => {
+    const access = await prisma.viewerAccess.update({
+        where: {
+            id: accessId
+        },
+        data: {
+            status: status
         }
     })
 

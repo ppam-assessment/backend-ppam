@@ -38,6 +38,7 @@ enum AreaType {
 enum accessStatus {
   pending
   approved
+  rejected
 }
 
 model Users {

@@ -10,6 +10,7 @@ import 'dotenv/config'
 import routes from './api/index.js'
 import { userSchemas } from './api/account/schema.js'
 import { responseSchemas } from './api/response/schema.js'
+import { viewerAccessSchema } from './api/view-access/schema.js'
 
 const app = Fastify({
   logger: true
@@ -35,10 +36,7 @@ app.register(fCookie, {
   hook: 'preHandler',
 })
 
-for(let schema of [...userSchemas]) {
-  app.addSchema(schema)
-}
-for(let schema of [...responseSchemas]) {
+for(let schema of [...userSchemas, ...responseSchemas, ...viewerAccessSchema]) {
   app.addSchema(schema)
 }
 

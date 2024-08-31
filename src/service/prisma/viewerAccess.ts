@@ -1,5 +1,33 @@
 import { accessStatus } from "@prisma/client";
 import prisma from "../../config/prisma.js";
+import { date } from "zod";
+
+export const readAllViewerAccess = async () => {
+    const access = await prisma.viewerAccess.findMany({
+        select: {
+            id: true,
+            status: true,
+            date: true
+        }
+    })
+
+    return access;
+}
+
+export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
+    const access = await prisma.viewerAccess.findFirst({
+        where: {
+            userId
+        },
+        select: {
+            id: true,
+            status: true,
+            date: true
+        }
+    })
+
+    return access;
+}
 
 export const createViewerAccess = async ({userId}: {userId: string}) => {
     const access = await prisma.viewerAccess.create({

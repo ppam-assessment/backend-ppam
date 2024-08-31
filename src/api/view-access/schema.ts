@@ -3,13 +3,13 @@ import { buildJsonSchemas } from 'fastify-zod'
 import { accessStatus } from '@prisma/client'
 
 
-export const postViewerAccessSchema = z.object({
+export const putViewerAccessSchema = z.object({
     id: z.number({ required_error: "Id is empty"}),
     status: z.nativeEnum(accessStatus),
 })
 
-export type PostViewerAccessSchema = z.infer<typeof postViewerAccessSchema>
+export type PutViewerAccessSchema = z.infer<typeof putViewerAccessSchema>
 
 export const { schemas: viewerAccessSchema, $ref } = buildJsonSchemas({
-    postViewerAccessSchema
+    putViewerAccessSchema
 }, { $id: 'viewerAccessSchema' })

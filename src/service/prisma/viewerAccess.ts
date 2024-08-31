@@ -1,6 +1,5 @@
 import { accessStatus } from "@prisma/client";
 import prisma from "../../config/prisma.js";
-import { date } from "zod";
 
 export const readAllViewerAccess = async () => {
     const access = await prisma.viewerAccess.findMany({

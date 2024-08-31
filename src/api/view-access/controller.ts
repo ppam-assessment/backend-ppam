@@ -1,8 +1,26 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Status } from "@prisma/client";
-import { createViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
+import { createViewerAccess, readAllViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
 import { PutViewerAccessSchema } from "./schema.js";
+
+export const getViewerAccessController = async (req: FastifyRequest, res: FastifyReply) => {
+    const session = await req.jwtVerify() as TokenPayload
+    const { user } = await getSessionUser({ id: session.id })
+
+    if (!user) {
+        return Error("User not found.");
+    } else if (user.status !== Status.admin) {
+        return Error("User doesn't have access.");
+    }
+
+    const access = await readAllViewerAccess()
+
+    res.send({
+        message: 'success',
+        data: access
+    })
+}
 
 export const postViewerAccessController = async (req: FastifyRequest, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload

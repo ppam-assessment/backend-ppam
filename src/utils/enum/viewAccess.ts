@@ -1,5 +1,5 @@
 export enum viewStatus {
-    approve,
-    reject,
-    resubmit
+    approve='approve',
+    reject='reject',
+    resubmit='resubmit'
 }

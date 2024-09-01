@@ -27,12 +27,14 @@ export const postUserResponseController = async (req: FastifyRequest<{ Body: Inp
   await deleteUserResponsesByInstrumentId({userId: user.id, instrumentId: instrumentIdList})
 
   const input = inputArr.map(data => {
+    const { instrumentId, value, multivalue, score, comment} = data
+
     return {
       userId: user.id,
-      instrumentId: data.instrumentId,
-      value: data.value,
-      score: data.score,
-      comment: data.comment
+      instrumentId: instrumentId,
+      value: multivalue?.toString() || value,
+      score: score,
+      comment: comment
     };
   }) as {
     userId: string,

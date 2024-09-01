@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
+import { viewStatus } from '../../utils/enum/viewAccess.js'
 
 export const putViewerAccessSchema = z.object({
     id: z.number({ required_error: "Id is empty"}),

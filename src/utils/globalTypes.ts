@@ -5,10 +5,4 @@ declare global {
         type: string,
         exp: number;
     }
-
-    enum viewStatus {
-        approve,
-        reject,
-        resubmit
-    }
 }

@@ -3,6 +3,7 @@ import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Status } from "@prisma/client";
 import { createViewerAccess, readAllViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
 import { PutViewerAccessSchema } from "./schema.js";
+import { viewStatus } from "../../utils/enum/viewAccess.js";
 
 export const getViewerAccessController = async (req: FastifyRequest, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload

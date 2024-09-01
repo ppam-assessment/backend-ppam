@@ -50,3 +50,19 @@ export const validateUserRole = async ({ id, status}: {id: string, status: Statu
         return false
     }
 }
+
+export const blockUser = async ({ id }: {id: string}) => {
+    const user = await prisma.users.update({
+        where: {
+            id,
+            status: {
+                notIn: ['admin', 'blocked']
+            }
+        },
+        data: {
+            status: Status.blocked
+        }
+    })
+
+    return user;
+}

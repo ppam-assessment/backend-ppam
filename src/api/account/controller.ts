@@ -3,9 +3,10 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema } from "./schema.js";
-import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
+import { blockUser, createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
 import { addSession, getSessionUser } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
+import { Status } from "@prisma/client";
 
 export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) => {
   loginUserSchema.safeParse(req.body)
@@ -87,5 +88,22 @@ export const logoutController = async(req: FastifyRequest, res: FastifyReply) =>
     httpOnly: true,
     secure: false,
     expires: new Date(Date.now())
+  })
+}
+
+export const putUserStatusBlocked = async (req: FastifyRequest, res: FastifyReply) => {
+  const session = await req.jwtVerify() as TokenPayload
+  const { user } = await getSessionUser({ id: session.id })
+
+  if (!user) {
+      return Error("User not found.");
+  } else if (user.status !== Status.admin) {
+      return Error("User doesn't have access.");
+  }
+
+  await blockUser({id: user.id})
+
+  res.send({
+    message: `User ${user.username} has been blocked.`
   })
 }

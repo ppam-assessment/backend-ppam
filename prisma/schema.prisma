@@ -43,10 +43,10 @@ enum accessStatus {
 
 model Users {
   id String @id
-  username String
+  username String @unique
   institute String?
   password String
-  email String
+  email String @unique
   status Status
 
   session Sessions[]

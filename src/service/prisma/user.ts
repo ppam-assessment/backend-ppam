@@ -51,10 +51,10 @@ export const validateUserRole = async ({ id, status }: { id: string, status: Sta
     }
 }
 
-export const blockUser = async ({ id }: { id: string }) => {
+export const blockUser = async ({ username }: { username: string }) => {
     const user = await prisma.users.update({
         where: {
-            id,
+            username,
             status: {
                 notIn: ['admin', 'blocked']
             }
@@ -67,7 +67,7 @@ export const blockUser = async ({ id }: { id: string }) => {
     return user;
 }
 
-export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }: { admin: boolean, submitter: boolean, viewer: boolean, blocked: boolean }) => {
+export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }: { admin: boolean | undefined, submitter: boolean | undefined, viewer: boolean | undefined, blocked: boolean | undefined }) => {
     const statusArr = [] as Status[]
     if (admin) statusArr.push(Status.admin)
     if (submitter) statusArr.push(Status.submitter)

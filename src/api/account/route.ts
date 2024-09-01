@@ -1,8 +1,10 @@
 import { FastifyInstance } from "fastify";
-import { createUserController, loginController } from "./controller.js";
+import { createUserController, getAllUsers, loginController, putUserStatusBlocked } from "./controller.js";
 import { $ref } from "./schema.js";
 
 export default function (app: FastifyInstance, opts: any, done: any) {
+  app.get("/", getAllUsers)
+
   app.post("/login", {
     schema: {
       body: $ref('loginUserSchema'),
@@ -15,7 +17,9 @@ export default function (app: FastifyInstance, opts: any, done: any) {
     }
   }, createUserController)
 
-  app.get("/logout", loginController)
+  app.put("/logout", loginController)
+
+  app.put("/block/:username", putUserStatusBlocked)
   
   done();
 }

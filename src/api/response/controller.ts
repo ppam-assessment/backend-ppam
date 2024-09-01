@@ -119,3 +119,42 @@ export const getAllResponse = async (req: FastifyRequest, res: FastifyReply) => 
     data: responses
   })
 }
+
+export const getUserResponseByUsername = async(req: FastifyRequest, res: FastifyReply) => {
+  const session = await req.jwtVerify() as TokenPayload
+  const { user } = await getSessionUser({ id: session.id })
+  const { username } = req.params as { username: string }
+
+  if (!user) {
+    return Error("User not found.");
+  } else if (user.status === Status.viewer) {
+    const access = await readViewerAccessByUserId({userId: user.id})
+    if (access?.status !== accessStatus.approved) return Error("User doesn't have access.")
+  } else if (user.status === Status.submitter) {
+    return Error("User doesn't have access.");
+  }
+
+  const response = await readUserResponses({username});
+  response.map( item => {
+    return {
+      id: item.id,
+      number: item.number,
+      question: item.question,
+      value: item.respons[0]?.value,
+      comment: item.respons[0]?.comment,
+      sub: item.type === InstrumentType.sub ? item.sub.map( subItem => {
+        return {
+          id: subItem.id,
+          question: subItem.question,
+          value: subItem.respons[0]?.value,
+          comment: subItem.respons[0]?.comment,    
+        }
+      }) : undefined
+    }
+  })
+
+  return res.send({
+    message: 'success.',
+    data: response
+  })
+}

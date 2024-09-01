@@ -54,13 +54,13 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
     const { id, status } = req.body
 
     switch (status) {
-        case accessStatus.approved:
-        case accessStatus.rejected:
+        case viewStatus.approve:
+        case viewStatus.reject:
             if (user.status !== Status.admin) {
                 return Error("User doesn't have access.");
             }
             break;
-        case accessStatus.pending:
+        case viewStatus.resubmit:
             if (user.status !== Status.viewer) {
                 return Error("User doesn't have access.");
             }
@@ -70,7 +70,13 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
             break;
     }
 
-    const updatedAccess = await updateViewerAccess({accessId: id, status})
+    const updatedStatus = status === viewStatus.approve
+        ? accessStatus.approved
+        : status === viewStatus.reject
+            ? accessStatus.rejected
+            : accessStatus.pending
+
+    const updatedAccess = await updateViewerAccess({accessId: id, status: updatedStatus})
 
     res.send({
         message: `Access status updated to ${status} for ${user.username}`,

@@ -11,6 +11,11 @@ export const readAllResponseMetadata = async () => {
                 select: {
                     name: true
                 }
+            },
+            responder: {
+                select: {
+                    username: true
+                }
             }
         }
     });

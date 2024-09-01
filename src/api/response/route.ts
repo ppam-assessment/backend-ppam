@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { getUserResponsesController, postUserResponseController } from "./controller.js";
+import { getAllResponse, getUserResponsesController, postUserResponseController } from "./controller.js";
 import { $ref } from "./schema.js";
 
 export default function (app: FastifyInstance, opts: any, done: any) {
@@ -9,6 +9,7 @@ export default function (app: FastifyInstance, opts: any, done: any) {
       body: $ref('inputResponseSchema'),
     }
   }, postUserResponseController)
+  app.get("/all", getAllResponse)
 
   done();
 }

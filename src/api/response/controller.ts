@@ -1,8 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import {  inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
-import { InstrumentType, Status } from "@prisma/client";
+import { accessStatus, InstrumentType, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
+import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
+import { readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -86,9 +88,32 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
 }
 
 export const getAllResponse = async (req: FastifyRequest, res: FastifyReply) => {
-  // Validasi Akses
+  const session = await req.jwtVerify() as TokenPayload
 
-  // Query get all
+  const { user } = await getSessionUser({ id: session.id })
 
-  // Response
+  if (!user) {
+    return Error("User not found.");
+  } else if (user.status === Status.viewer) {
+    const access = await readViewerAccessByUserId({userId: user.id})
+    if (access?.status !== accessStatus.approved) return Error("User doesn't have access.")
+  } else if (user.status === Status.submitter) {
+    return Error("User doesn't have access.");
+  }
+
+  const responses = await readAllResponseMetadata()
+  responses.map( response => {
+    return {
+      submitter: response.responder.username,
+      leader: response.leader,
+      date: response.date,
+      area: response.area.name,
+      participants: response.participants
+    }
+  })
+
+  return res.send({
+    message: 'success.',
+    data: responses
+  })
 }

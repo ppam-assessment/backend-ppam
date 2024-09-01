@@ -2,6 +2,7 @@ import prisma from "../client.js"
 import topics from "./data/topic.js"
 import users from "./data/users.js"
 import instruments from "./data/instrument.js"
+import areas from "./data/areas.js"
 
 async function main() {
 
@@ -18,6 +19,10 @@ async function main() {
       data: instrument,
     })
   }
+
+  await prisma.areas.createMany({
+    data: areas
+  })
 
   console.log('Seeding completed.')
 }

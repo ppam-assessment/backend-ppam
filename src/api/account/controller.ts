@@ -6,7 +6,6 @@ import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema } 
 import { createUser, getUserByEmail, getUserByName } from "../../service/prisma/user.js";
 import { addSession, getSessionUser } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
-import { Status } from "@prisma/client";
 
 export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) => {
   loginUserSchema.safeParse(req.body)

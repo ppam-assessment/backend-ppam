@@ -21,7 +21,7 @@ export const getUserByName = async ({ username }: { username: string }) => {
     return user;
 }
 
-export const createUser = async ({ id, username,  institute, email, password, status = Status.viewer }: { id: string, username: string, institute: string | undefined , email: string, password: string, status: Status }) => {
+export const createUser = async ({ id, username, institute, email, password, status = Status.viewer }: { id: string, username: string, institute: string | undefined, email: string, password: string, status: Status }) => {
     const user = await prisma.users.create({
         data: {
             id,
@@ -36,7 +36,7 @@ export const createUser = async ({ id, username,  institute, email, password, st
     return user;
 }
 
-export const validateUserRole = async ({ id, status}: {id: string, status: Status}) => {
+export const validateUserRole = async ({ id, status }: { id: string, status: Status }) => {
     const user = await prisma.users.findFirstOrThrow({
         where: {
             id,
@@ -51,7 +51,7 @@ export const validateUserRole = async ({ id, status}: {id: string, status: Statu
     }
 }
 
-export const blockUser = async ({ id }: {id: string}) => {
+export const blockUser = async ({ id }: { id: string }) => {
     const user = await prisma.users.update({
         where: {
             id,
@@ -65,4 +65,24 @@ export const blockUser = async ({ id }: {id: string}) => {
     })
 
     return user;
+}
+
+export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }: { admin: boolean, submitter: boolean, viewer: boolean, blocked: boolean }) => {
+    const statusArr = [] as Status[]
+    if (admin) statusArr.push(Status.admin)
+    if (submitter) statusArr.push(Status.submitter)
+    if (viewer) statusArr.push(Status.viewer)
+    if (blocked) statusArr.push(Status.blocked)
+
+    const whereCondition = {
+        status: {
+            in: statusArr
+        }
+    }
+
+    const users = await prisma.users.findMany({
+        where: whereCondition
+    })
+
+    return users
 }

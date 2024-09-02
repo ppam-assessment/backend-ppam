@@ -7,6 +7,9 @@ import { blockUser, createUser, getUserByEmail, getUserByName, readAllUserByStat
 import { addSession, getSessionUser } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 import { Status } from "@prisma/client";
+import { NotFound } from "../../exceptions/NotFound.js";
+import { Forbidden } from "../../exceptions/Forbidden.js";
+import { BadRequest } from "../../exceptions/BadRequest.js";
 
 export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) => {
   loginUserSchema.safeParse(req.body)
@@ -20,12 +23,9 @@ export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchem
       await getUserByName({ username })
       : undefined
 
+      if(!user) throw new BadRequest("Invalid email or username.")
   const isMatch = user && bcrypt.compareSync(password, user.password);
-  if (!user || !isMatch) {
-    return res.code(401).send({
-      message: 'Invalid email or password.',
-    })
-  }
+  if (!isMatch) throw new BadRequest("Invalid password.")
 
   const token = req.jwt.sign({
     id: sessionId,
@@ -96,9 +96,9 @@ export const putUserStatusBlocked = async (req: FastifyRequest, res: FastifyRepl
   const { user } = await getSessionUser({ id: session.id })
 
   if (!user) {
-      return Error("User not found.");
+      throw new NotFound("User not found.");
   } else if (user.status !== Status.admin) {
-      return Error("User doesn't have access.");
+      throw new Forbidden("User doesn't have access.");
   }
 
   const { username } = req.params as { username: string }

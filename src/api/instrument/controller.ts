@@ -1,8 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getAllInstrument } from "../../service/prisma/instrument.js";
 import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js"
-import { getSession, getSessionUser } from "../../service/prisma/session.js";
-import { error } from "console";
 import { readAreaChoices } from "../../service/prisma/area.js";
 import { AreaType } from "@prisma/client";
 

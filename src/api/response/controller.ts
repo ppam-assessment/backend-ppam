@@ -5,6 +5,8 @@ import { accessStatus, InstrumentType, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
 import { readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
+import { NotFound } from "../../exceptions/NotFound.js";
+import { Forbidden } from "../../exceptions/Forbidden.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -12,9 +14,9 @@ export const postUserResponseController = async (req: FastifyRequest<{ Body: Inp
   const { user } = await getSessionUser({ id: session.id })
 
   if (!user) {
-    return Error("User not found.");
+    throw new NotFound("User not found.");
   } else if (user.status !== Status.submitter) {
-    return Error("User doesn't have access.");
+    throw new Forbidden("User doesn't have access.");
   }
 
   inputResponseSchema.safeParse(req.body)
@@ -57,9 +59,9 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
 
   const { user } = await getSessionUser({ id: session.id })
   if (!user) {
-    return Error("User not found.");
+    throw new NotFound("User not found.");
   } else if ( (user.status !== Status.submitter) || (session.username !== user.username) ) {
-    return Error("User doesn't have access.");
+    throw new Forbidden("User doesn't have access.");
   }
 
   const { topic } = req.query as { topic?: string };
@@ -95,12 +97,12 @@ export const getAllResponse = async (req: FastifyRequest, res: FastifyReply) => 
   const { user } = await getSessionUser({ id: session.id })
 
   if (!user) {
-    return Error("User not found.");
+    throw new NotFound("User not found.");
   } else if (user.status === Status.viewer) {
     const access = await readViewerAccessByUserId({userId: user.id})
-    if (access?.status !== accessStatus.approved) return Error("User doesn't have access.")
+    if (access?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
   } else if (user.status === Status.submitter) {
-    return Error("User doesn't have access.");
+    throw new Forbidden("User doesn't have access.");
   }
 
   const responses = await readAllResponseMetadata()
@@ -126,12 +128,12 @@ export const getUserResponseByUsername = async(req: FastifyRequest, res: Fastify
   const { username } = req.params as { username: string }
 
   if (!user) {
-    return Error("User not found.");
+    throw new NotFound("User not found.");
   } else if (user.status === Status.viewer) {
     const access = await readViewerAccessByUserId({userId: user.id})
-    if (access?.status !== accessStatus.approved) return Error("User doesn't have access.")
+    if (access?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
   } else if (user.status === Status.submitter) {
-    return Error("User doesn't have access.");
+    throw new Forbidden("User doesn't have access.");
   }
 
   const response = await readUserResponses({username});

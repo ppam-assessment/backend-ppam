@@ -123,6 +123,7 @@ model ViewerAccess {
   id Int @id @default(autoincrement())
   userId String @unique
   status accessStatus @default(pending)
+  reason String?
   date DateTime @default(now()) @updatedAt
 
   viewer Users @relation(fields: [userId], references: [id])

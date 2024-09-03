@@ -6,6 +6,7 @@ export const readAllViewerAccess = async () => {
         select: {
             id: true,
             status: true,
+            reason: true,
             date: true
         }
     })
@@ -21,6 +22,7 @@ export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
         select: {
             id: true,
             status: true,
+            reason:true,
             date: true
         }
     })
@@ -28,7 +30,7 @@ export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
     return access;
 }
 
-export const createViewerAccess = async ({userId}: {userId: string}) => {
+export const createViewerAccess = async ({userId, reason}: {userId: string, reason: string | undefined}) => {
     const access = await prisma.viewerAccess.create({
         data: {
             userId
@@ -38,13 +40,14 @@ export const createViewerAccess = async ({userId}: {userId: string}) => {
     return access;
 }
 
-export const updateViewerAccess = async ({accessId, status}: {accessId: number, status: accessStatus}) => {
+export const updateViewerAccess = async ({accessId, status, reason}: {accessId: number, status: accessStatus, reason?: string | undefined}) => {
     const access = await prisma.viewerAccess.update({
         where: {
             id: accessId
         },
         data: {
-            status: status
+            status,
+            reason
         }
     })
 

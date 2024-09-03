@@ -93,11 +93,11 @@ export const logoutController = async(req: FastifyRequest, res: FastifyReply) =>
 
 export const putUserStatusBlocked = async (req: FastifyRequest, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
-  const { user } = await getSessionUser({ id: session.id })
+  const { user } = await getSessionUser({ id: session.id }).catch( () => {
+    throw new NotFound("User not found.")
+})
 
-  if (!user) {
-      throw new NotFound("User not found.");
-  } else if (user.status !== Status.admin) {
+  if (user.status !== Status.admin) {
       throw new Forbidden("User doesn't have access.");
   }
 

@@ -13,13 +13,17 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
     const session = await req.jwtVerify() as TokenPayload
     const { user } = await getSessionUser({ id: session.id })
 
+    const viewAccess = await readViewerAccessByUserId({userId: user.id})
+
     if (!user) {
         throw new NotFound("User not found.");
-    } else if (user.status !== Status.admin) {
+    } else if ( user.status === Status.submitter || !viewAccess ) {
         throw new Forbidden("User doesn't have access.");
     }
 
-    const access = await readAllViewerAccess()
+    const access = user.status === Status.admin ? await readAllViewerAccess() : {
+        status: viewAccess?.status
+    }
 
     res.send({
         message: 'success',

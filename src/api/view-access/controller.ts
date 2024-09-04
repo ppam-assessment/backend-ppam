@@ -16,20 +16,34 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
         throw new NotFound("User not found.")
     })
 
-    const viewAccess = await readViewerAccessByUserId({userId: user.id})
+    let data: any
 
-    if ( user.status === Status.submitter ) {
-        throw new Forbidden("User doesn't have access.");
-    }
-
-    const access = user.status === Status.admin ? await readAllViewerAccess() : {
-        status: viewAccess?.status,
-        reason: viewAccess?.reason
+    switch (user.status) {
+        case Status.admin:
+            const viewerAccess = await readAllViewerAccess();
+            data = viewerAccess.map( item => {
+                return {
+                    date: item.date,
+                    username: item.viewer.username,
+                    reason: item.reason,
+                    status: item.status
+                }
+            })
+            break;
+        case Status.viewer:
+            const viewAccess = await readViewerAccessByUserId({userId: user.id})
+            data = {
+                status: viewAccess?.status,
+                reason: viewAccess?.reason || ''
+            }        
+            break;
+        default:
+            throw new Forbidden("User doesn't have access.");
     }
 
     res.send({
         message: 'success',
-        data: access
+        data
     })
 }
 

@@ -4,10 +4,14 @@ import prisma from "../../config/prisma.js";
 export const readAllViewerAccess = async () => {
     const access = await prisma.viewerAccess.findMany({
         select: {
-            id: true,
             status: true,
             reason: true,
-            date: true
+            date: true,
+            viewer: {
+                select: {
+                    username: true
+                }
+            }
         }
     })
 

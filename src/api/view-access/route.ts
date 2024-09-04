@@ -4,7 +4,11 @@ import { getViewerAccessController, postViewerAccessController, putViewerAccessC
 
 export default function (app: FastifyInstance, opts: any, done: any) {
     app.get("/", getViewerAccessController)
-    app.post("/", postViewerAccessController)
+    app.post("/", {
+        schema: {
+            body: $ref('postViewerAccessSchema'),
+        }
+    }, postViewerAccessController)
     app.put("/", {
         schema: {
             body: $ref('putViewerAccessSchema'),

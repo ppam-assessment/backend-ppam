@@ -10,7 +10,11 @@ export default function (app: FastifyInstance, opts: any, done: any) {
     }
   }, postUserResponseController)
   app.get("/metadata", getResponseMetadata)
-  app.post("/metadata", postSubmitterMetadata)
+  app.post("/metadata", {
+    schema: {
+      body: $ref('inputMetadataSchema'),
+    }
+  }, postSubmitterMetadata)
   app.get("/:username", getUserResponseByUsername)
 
   done();

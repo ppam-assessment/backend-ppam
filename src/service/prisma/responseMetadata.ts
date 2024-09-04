@@ -35,3 +35,17 @@ export const readUserIdByMetadataId = async({metaId}: {metaId: number}) => {
 
     return userId;
 }
+
+export const createResponseMetadata = async({userId, areaId, leader, date, participant}: {userId: string, areaId: number, leader: string, date: Date, participant: string}) => {
+    const metadata = await prisma.responseMetadata.create({
+        data: {
+            userId,
+            areaId,
+            leader,
+            date,
+            participants: participant
+        }
+    })
+
+    return metadata;
+}

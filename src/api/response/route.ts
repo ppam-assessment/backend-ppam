@@ -9,7 +9,7 @@ export default function (app: FastifyInstance, opts: any, done: any) {
       body: $ref('inputResponseSchema'),
     }
   }, postUserResponseController)
-  app.get("/all", getAllResponse)
+  app.get("/metadata", getAllResponse)
   app.get("/:username", getUserResponseByUsername)
 
   done();

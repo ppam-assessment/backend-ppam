@@ -7,6 +7,7 @@ import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
 import { createResponseMetadata, readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
+import { readUserByUsername } from "../../service/prisma/user.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -137,7 +138,9 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
     throw new Forbidden("User doesn't have access.");
   }
 
-  const response = await readUserResponses({ username });
+  const submitter = await readUserByUsername({ username }).catch(() => { throw new NotFound(`Submitter ${username} not found.`) })
+
+  const response = await readUserResponses({ userId: submitter.id });
   response.map(item => {
     return {
       id: item.id,
@@ -162,19 +165,19 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   })
 }
 
-export const postSubmitterMetadata= async (req: FastifyRequest<{Body: InputMetadataSchema}>, res: FastifyReply) => {
+export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMetadataSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
   const { user } = await getSessionUser({ id: session.id }).catch(() => {
     throw new NotFound("User not found.")
   })
 
-  if(user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
+  if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
 
-  const {areaId, leader, date, participant} = req.body
+  const { areaId, leader, date, participant } = req.body
 
-  if(user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
+  if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({userId: user.id, areaId, leader, participant, date });
+  await createResponseMetadata({ userId: user.id, areaId, leader, participant, date });
   res.code(201).send({
     message: `Response metadata created for ${user.username}.`,
   })

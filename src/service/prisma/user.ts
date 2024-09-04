@@ -86,3 +86,14 @@ export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }:
 
     return users
 }
+
+export const readUserByUsername = async ({ username }: { username: string }) => {
+
+    const user = await prisma.users.findFirstOrThrow({
+        where: {
+            username
+        }
+    })
+
+    return user
+}

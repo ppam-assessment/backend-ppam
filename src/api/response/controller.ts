@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { inputResponseSchema, InputResponseSchema } from "./schema.js";
+import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, InstrumentType, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
-import { readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
+import { createResponseMetadata, readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 
@@ -92,7 +92,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   })
 }
 
-export const getAllResponse = async (req: FastifyRequest, res: FastifyReply) => {
+export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
 
   const { user } = await getSessionUser({ id: session.id }).catch(() => {
@@ -159,5 +159,23 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   return res.send({
     message: 'success.',
     data: response
+  })
+}
+
+export const postSubmitterMetadata= async (req: FastifyRequest<{Body: InputMetadataSchema}>, res: FastifyReply) => {
+  const session = await req.jwtVerify() as TokenPayload
+  const { user } = await getSessionUser({ id: session.id }).catch(() => {
+    throw new NotFound("User not found.")
+  })
+
+  if(user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
+
+  const {areaId, leader, date, participant} = req.body
+
+  if(user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
+
+  await createResponseMetadata({userId: user.id, areaId, leader, participant, date });
+  res.code(201).send({
+    message: `Response metadata created for ${user.username}.`,
   })
 }

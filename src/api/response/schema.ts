@@ -12,8 +12,17 @@ export const inputResponseSchema = z.object({
 
 }).array()
 
+export const inputMetadataSchema = z.object({
+    areaId: z.number({required_error: 'areaId is required.'}),
+    leader: z.string(),
+    date: z.date().default(new Date(Date.now())),
+    participant: z.string()
+})
+
 export type InputResponseSchema = z.infer<typeof inputResponseSchema>
+export type InputMetadataSchema = z.infer<typeof inputMetadataSchema>
 
 export const { schemas: responseSchemas, $ref } = buildJsonSchemas({
-    inputResponseSchema
+    inputResponseSchema,
+    inputMetadataSchema
 }, { $id: 'responseSchema' })

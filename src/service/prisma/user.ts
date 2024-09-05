@@ -1,5 +1,6 @@
-import { Status } from "@prisma/client";
+import { Prisma, Status } from "@prisma/client";
 import prisma from "../../config/prisma.js";
+import { Conflict } from "../../exceptions/Conflict.js";
 
 export const getUserByEmail = async ({ email }: { email: string }) => {
     const user = await prisma.users.findFirst({
@@ -31,6 +32,14 @@ export const createUser = async ({ id, username, institute, email, password, sta
             password,
             status
         }
+    }).catch( e => {
+        if ( e instanceof Prisma.PrismaClientKnownRequestError )
+            if(e.code === 'P2002') {
+                const {message} = e
+                
+                if(message.includes('username')) throw new Conflict(`Username ${username} already exist.`)
+                if(message.includes('email')) throw new Conflict(`Email ${email} already exist`)
+            }
     })
 
     return user;

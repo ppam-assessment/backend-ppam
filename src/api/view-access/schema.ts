@@ -7,9 +7,8 @@ export const postViewerAccessSchema = z.object({
 })
 
 export const putViewerAccessSchema = z.object({
-    id: z.number({ required_error: "Id is empty"}),
     status: z.nativeEnum(viewStatus),
-    reason: z.string().optional()
+    reason: z.string().optional(),
 })
 
 export type PutViewerAccessSchema = z.infer<typeof putViewerAccessSchema>

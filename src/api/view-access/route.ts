@@ -1,6 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { $ref } from "./schema.js";
-import { getViewerAccessController, postViewerAccessController, putViewerAccessController } from "./controller.js";
+import { getViewerAccessController, postViewerAccessController, putResubmitAccessController, putViewerAccessController } from "./controller.js";
 
 export default function (app: FastifyInstance, opts: any, done: any) {
     app.get("/", getViewerAccessController)
@@ -10,6 +10,12 @@ export default function (app: FastifyInstance, opts: any, done: any) {
         }
     }, postViewerAccessController)
     app.put("/", {
+        schema: {
+            body: $ref('putViewerAccessSchema'),
+        }
+    }, putResubmitAccessController)
+
+    app.put("/:username", {
         schema: {
             body: $ref('putViewerAccessSchema'),
         }

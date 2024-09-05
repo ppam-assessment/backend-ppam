@@ -8,6 +8,7 @@ import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { Conflict } from "../../exceptions/Conflict.js";
 import { UnprocessableEntity } from "../../exceptions/UnprocessableEntity.js";
+import { readUserByUsername } from "../../service/prisma/user.js";
 
 export const getViewerAccessController = async (req: FastifyRequest, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
@@ -70,30 +71,37 @@ export const postViewerAccessController = async (req: FastifyRequest<{Body: Post
     })
 }
 
+export const putResubmitAccessController = async (req: FastifyRequest<{ Body: PutViewerAccessSchema }>, res: FastifyReply) => {
+    const session = await req.jwtVerify() as TokenPayload
+    const { user } = await getSessionUser({ id: session.id }).catch( () => {
+        throw new NotFound("User not found.")
+    })
+    const isViewer = user.status === Status.viewer;
+
+    const { status, reason } = req.body
+
+    if( !isViewer || status === viewStatus.approve || status === viewStatus.reject ) throw new NotFound("User doesn't have access."); 
+
+    const updatedStatus = accessStatus.pending
+
+    await updateViewerAccess({userId: user.id , status: updatedStatus, reason: isViewer ? reason : undefined })
+
+    res.send({
+        message: `Access status updated to ${status} for ${user.username}`,
+    })
+
+}
+
 export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutViewerAccessSchema }>, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
     const { user } = await getSessionUser({ id: session.id }).catch( () => {
         throw new NotFound("User not found.")
     })
 
-    const { id, status, reason } = req.body
+    const { username } = req.params as { username: string }
+    const { status, reason } = req.body
 
-    switch (status) {
-        case viewStatus.approve:
-        case viewStatus.reject:
-            if (user.status !== Status.admin) {
-                throw new NotFound("User doesn't have access.");
-            }
-            break;
-        case viewStatus.resubmit:
-            if (user.status !== Status.viewer) {
-                throw new NotFound("User doesn't have access.");
-            }
-            break;
-        default:
-            throw new UnprocessableEntity('Undefined action')
-            break;
-    }
+    if (user.status !== Status.admin && (status === viewStatus.approve || status === viewStatus.reject)) throw new UnprocessableEntity('Undefined action')
 
     const updatedStatus = status === viewStatus.approve
         ? accessStatus.approved
@@ -101,12 +109,14 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
             ? accessStatus.rejected
             : accessStatus.pending
 
+        const viewer = await readUserByUsername({ username})
+
     const isViewer = user.status === Status.viewer;
-    const updatedAccess = await updateViewerAccess({accessId: id, status: updatedStatus, reason: isViewer ? reason : undefined })
+    
+    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined })
 
     res.send({
-        message: `Access status updated to ${status} for ${user.username}`,
-        data: updatedAccess
+        message: `Access status updated to ${status} for ${viewer.username}`
     })
 
 }

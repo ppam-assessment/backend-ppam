@@ -89,7 +89,6 @@ export const putResubmitAccessController = async (req: FastifyRequest<{ Body: Pu
     res.send({
         message: `Access status updated to ${status} for ${user.username}`,
     })
-
 }
 
 export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutViewerAccessSchema }>, res: FastifyReply) => {

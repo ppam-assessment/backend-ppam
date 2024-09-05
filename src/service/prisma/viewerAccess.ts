@@ -37,7 +37,8 @@ export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
 export const createViewerAccess = async ({userId, reason}: {userId: string, reason: string | undefined}) => {
     const access = await prisma.viewerAccess.create({
         data: {
-            userId
+            userId,
+            reason
         }
     })
 

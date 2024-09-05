@@ -53,21 +53,21 @@ export const createUserController = async (req: FastifyRequest<{ Body: CreateUse
   createUserSchema.safeParse(req.body)
 
   const { email, username, password, status, institute } = req.body;
-  const id = uuidv4();
+  const userId = uuidv4();
   const sessionId = uuidv4();
   const hashedPassword = bcrypt.hashSync(password, 10);
   const exp = await getNextDay()
 
-  const user = await createUser({ id, username, institute, email, password: hashedPassword, status })
+  const user = await createUser({ id: userId, username, institute, email, password: hashedPassword, status })
 
   const token = req.jwt.sign({
     id: sessionId,
-    username: user.username,
+    username: username,
     institute: user?.institute || undefined,
-    status: user.status,
+    status: status,
   })
 
-  await addSession({ id: sessionId, userId: user.id, token, exp })
+  await addSession({ id: sessionId, userId: userId, token, exp })
 
   return res.code(201).send({
     message: "User created.",

@@ -1,6 +1,7 @@
 import { Prisma, Status } from "@prisma/client";
 import prisma from "../../config/prisma.js";
 import { Conflict } from "../../exceptions/Conflict.js";
+import { Forbidden } from "../../exceptions/Forbidden.js";
 
 export const getUserByEmail = async ({ email }: { email: string }) => {
     const user = await prisma.users.findFirst({
@@ -8,6 +9,8 @@ export const getUserByEmail = async ({ email }: { email: string }) => {
             email
         }
     })
+
+    if (user?.status === Status.blocked) throw new Forbidden(`account ${user.username} was blocked.`)
 
     return user;
 }
@@ -18,6 +21,8 @@ export const getUserByName = async ({ username }: { username: string }) => {
             username
         }
     })
+
+    if (user?.status === Status.blocked) throw new Forbidden(`account ${user.username} was blocked.`)
 
     return user;
 }

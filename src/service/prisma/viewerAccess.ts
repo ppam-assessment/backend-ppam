@@ -45,14 +45,15 @@ export const createViewerAccess = async ({userId, reason}: {userId: string, reas
     return access;
 }
 
-export const updateViewerAccess = async ({userId, status, reason}: {userId: string, status: accessStatus, reason?: string | undefined}) => {
+export const updateViewerAccess = async ({userId, status, reason, rejectReason}: {userId: string, status: accessStatus, reason?: string | undefined, rejectReason?: string | undefined}) => {
     const access = await prisma.viewerAccess.update({
         where: {
             userId
         },
         data: {
             status,
-            reason
+            reason,
+            rejectReason
         },
     })
 

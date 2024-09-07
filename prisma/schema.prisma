@@ -124,6 +124,7 @@ model ViewerAccess {
   userId String @unique
   status accessStatus @default(pending)
   reason String?
+  rejectReason String?
   date DateTime @default(now()) @updatedAt
 
   viewer Users @relation(fields: [userId], references: [id])

@@ -9,6 +9,7 @@ export const postViewerAccessSchema = z.object({
 export const putViewerAccessSchema = z.object({
     status: z.nativeEnum(viewStatus),
     reason: z.string().optional(),
+    rejectReason: z.string().optional()
 })
 
 export type PutViewerAccessSchema = z.infer<typeof putViewerAccessSchema>

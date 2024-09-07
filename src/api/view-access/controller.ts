@@ -27,6 +27,7 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
                     date: item.date,
                     username: item.viewer.username,
                     reason: item.reason,
+                    rejectReason: item.rejectReason,
                     status: item.status
                 }
             })
@@ -35,7 +36,8 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
             const viewAccess = await readViewerAccessByUserId({userId: user.id})
             data = {
                 status: viewAccess?.status,
-                reason: viewAccess?.reason || '',
+                reason: viewAccess?.reason || '-',
+                rejectsReaseon: viewAccess?.rejectReason || '-',
                 date: viewAccess?.date
             }        
             break;

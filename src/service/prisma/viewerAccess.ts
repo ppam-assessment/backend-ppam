@@ -6,6 +6,7 @@ export const readAllViewerAccess = async () => {
         select: {
             status: true,
             reason: true,
+            rejectReason: true,
             date: true,
             viewer: {
                 select: {
@@ -27,7 +28,8 @@ export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
             id: true,
             status: true,
             reason:true,
-            date: true
+            date: true,
+            rejectReason: true
         }
     })
 

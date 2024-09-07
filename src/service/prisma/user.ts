@@ -10,7 +10,7 @@ export const getUserByEmail = async ({ email }: { email: string }) => {
         }
     })
 
-    if (user?.status === Status.blocked) throw new Forbidden(`account ${user.username} was blocked.`)
+    if (user?.status === Status.blocked) throw new Forbidden(`User ${user.username} was blocked.`)
 
     return user;
 }
@@ -22,7 +22,7 @@ export const getUserByName = async ({ username }: { username: string }) => {
         }
     })
 
-    if (user?.status === Status.blocked) throw new Forbidden(`account ${user.username} was blocked.`)
+    if (user?.status === Status.blocked) throw new Forbidden(`User ${user.username} was blocked.`)
 
     return user;
 }

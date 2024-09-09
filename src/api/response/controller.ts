@@ -118,7 +118,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
       submitter: response.responder.username,
       leader: response.leader,
       date: response.date,
-      area: response.area.name,
+      area: response.area,
       participants: response.participants
     }
   })
@@ -178,11 +178,11 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
 
-  const { areaId, leader, date, participant } = req.body
+  const { area, leader, date, participant } = req.body
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({ userId: user.id, areaId, leader, participant, date });
+  await createResponseMetadata({ userId: user.id, area, leader, participant, date });
   res.code(201).send({
     message: `Response metadata created for ${user.username}.`,
   })

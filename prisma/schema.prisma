@@ -59,8 +59,6 @@ model Areas {
   id Int @id @default(autoincrement())
   name String
   type AreaType
-
-  response ResponseMetadata[]
 }
 
 model Topics {
@@ -73,14 +71,13 @@ model Topics {
 
 model ResponseMetadata {
   id Int @id @default(autoincrement())
-  areaId Int @unique
+  area String
   userId String @unique
   leader String
   date DateTime @default(now())
   participants String
 
   responder Users @relation(fields: [userId],references: [id])
-  area Areas @relation(fields: [areaId], references: [id])
 }
 
 model Instrument {

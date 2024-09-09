@@ -12,7 +12,7 @@ export const inputResponseSchema = z.object({
 }).array()
 
 export const inputMetadataSchema = z.object({
-    areaId: z.number({required_error: 'areaId is required.'}),
+    area: z.string({required_error: 'areaId is required.'}),
     leader: z.string(),
     date: z.date().default(new Date(Date.now())),
     participant: z.string()

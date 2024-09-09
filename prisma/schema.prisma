@@ -71,7 +71,7 @@ model Topics {
 
 model ResponseMetadata {
   id Int @id @default(autoincrement())
-  area String
+  area String?
   userId String @unique
   leader String
   date DateTime @default(now())

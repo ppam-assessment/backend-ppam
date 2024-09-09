@@ -49,3 +49,19 @@ export const createResponseMetadata = async({userId, areaId, leader, date, parti
 
     return metadata;
 }
+
+export const readResponseMetadataByUserId = async({userId}: {userId: string}) => {
+    const metadata = await prisma.responseMetadata.findFirst({
+        select: {
+            leader: true,
+            date: true,
+            participants: true,
+            areaId: true
+        },
+        where: {
+            userId
+        }
+    })
+
+    return metadata
+}

@@ -4,7 +4,7 @@ import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, InstrumentType, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
-import { createResponseMetadata, readAllResponseMetadata } from "../../service/prisma/responseMetadata.js";
+import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
@@ -87,9 +87,14 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
     }
   })
 
+  const metadata = await readResponseMetadataByUserId({userId: user.id})
+
   return res.code(200).send({
     message: `Data added for ${user.username}.`,
-    data: responses
+    data: {
+      metadata,
+      responses
+    }
   })
 }
 

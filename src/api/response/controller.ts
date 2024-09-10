@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
-import { accessStatus, InstrumentType, Status } from "@prisma/client";
+import { accessStatus, InstrumentType, Prisma, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
-import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId } from "../../service/prisma/responseMetadata.js";
+import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
@@ -182,7 +182,20 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({ userId: user.id, area, leader, participant, date });
+  await createResponseMetadata({ userId: user.id, area, leader, participant, date })
+    .catch(async e => {
+      const isPrismaErr = e instanceof Prisma.PrismaClientKnownRequestError
+      const isUserIdErr = e.message.includes('userId')
+
+      if (isPrismaErr && isUserIdErr) {
+        await updateResponseMetadata({ userId: user.id, area, leader, date, participant })
+        return res.code(200).send({
+          message: `Response metadata updated for ${user.username}.`,
+        })
+      }
+      throw e
+    });
+
   res.code(201).send({
     message: `Response metadata created for ${user.username}.`,
   })

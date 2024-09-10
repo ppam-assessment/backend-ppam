@@ -1,4 +1,6 @@
+import { Prisma } from "@prisma/client";
 import prisma from "../../config/prisma.js"
+import { updateViewerAccess } from "./viewerAccess.js";
 
 export const readAllResponseMetadata = async () => {
     const listResponse = await prisma.responseMetadata.findMany({
@@ -60,4 +62,20 @@ export const readResponseMetadataByUserId = async({userId}: {userId: string}) =>
     })
 
     return metadata
+}
+
+export const updateResponseMetadata = async({userId, area, leader, date, participant}: {userId: string, area: string, leader: string, date: Date, participant: string}) => {
+    const metadata = await prisma.responseMetadata.update({
+        where: {
+            userId,
+        },
+        data: {
+            area,
+            leader,
+            date,
+            participants: participant
+        }
+    })
+
+    return metadata;
 }

@@ -45,7 +45,7 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
             throw new Forbidden("User doesn't have access.");
     }
 
-    res.send({
+    res.code(200).send({
         message: 'success',
         data
     })
@@ -89,7 +89,7 @@ export const putResubmitAccessController = async (req: FastifyRequest<{ Body: Pu
 
     await updateViewerAccess({userId: user.id , status: updatedStatus, reason: isViewer ? reason : undefined })
 
-    res.send({
+    res.code(200).send({
         message: `Access status updated to ${status} for ${user.username}`,
     })
 }
@@ -117,7 +117,7 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
     
     await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason })
 
-    res.send({
+    res.code(200).send({
         message: `Access status updated to ${status} for ${viewer.username}`
     })
 

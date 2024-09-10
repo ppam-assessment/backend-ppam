@@ -83,7 +83,7 @@ export const createUserController = async (req: FastifyRequest<{ Body: CreateUse
 }
 
 export const logoutController = async(req: FastifyRequest, res: FastifyReply) => {
-  return res.setCookie('access_token', 'invalid', {
+  return res.code(200).setCookie('access_token', 'invalid', {
     path: '/',
     httpOnly: true,
     secure: false,
@@ -105,7 +105,7 @@ export const putUserStatusBlocked = async (req: FastifyRequest, res: FastifyRepl
 
   await blockUser({ username })
 
-  return res.send({
+  return res.code(200).send({
     message: `User ${user.username} has been blocked.`
   })
 }
@@ -115,7 +115,7 @@ export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
 
   const users = await readAllUserByStatus({ admin, submitter, viewer, blocked})
 
-  return res.send({
+  return res.code(200).send({
     message: 'Success.',
     data: users
   })

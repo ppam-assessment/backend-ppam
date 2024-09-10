@@ -123,7 +123,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
     }
   })
 
-  return res.send({
+  return res.code(200).send({
     message: 'success.',
     data: responses
   })
@@ -164,7 +164,7 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
     }
   })
 
-  return res.send({
+  return res.code(200).send({
     message: 'success.',
     data: response
   })

@@ -95,7 +95,14 @@ export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }:
     }
 
     const users = await prisma.users.findMany({
-        where: whereCondition
+        where: whereCondition,
+        select: {
+            username: true,
+            institute: true,
+            email: true,
+            password: true,
+            status: true
+        }
     })
 
     return users

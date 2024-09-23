@@ -112,7 +112,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
   const mappedResponses = responses.map(response => {
     const { province, city } = response;
 
-    const area = !province ? 'Nasional' : `Subnasional, ${province}, ${city || ''}`
+    const area = !province ? 'Nasional' : `Subnasional, ${province?.name}, ${city || ''}`
     return {
       submitter: response.responder.username,
       leader: response.leader,

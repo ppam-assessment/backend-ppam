@@ -107,7 +107,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   return res.code(200).send({
     message: `Data added for ${user.username}.`,
     data: {
-      metadata,
+      metadata: mappedMetadata,
       responses: groupedResponses
     }
   })

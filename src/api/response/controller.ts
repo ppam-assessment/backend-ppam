@@ -81,7 +81,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const mappedMetadata = {
     leader: metadata?.leader,
     date: metadata?.date,
-    area: metadata?.province?.name ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
+    area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
     participants: metadata?.participants
   }
 
@@ -154,7 +154,7 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const mappedMetadata = {
       leader: metadata?.leader,
       date: metadata?.date,
-      area: metadata?.province?.name ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
+      area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
       participants: metadata?.participants
     }
 

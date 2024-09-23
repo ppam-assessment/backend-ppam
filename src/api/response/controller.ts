@@ -71,25 +71,6 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const { topic } = req.query as { topic?: string };
   const topicId = topic ? parseInt(topic, 10) : undefined;
 
-  // const responses = (await readUserResponses({ userId: user.id, topicId })).map(item => {
-  //   return {
-  //     id: item.id,
-  //     number: item.number,
-  //     topicId: item.topicId,
-  //     question: item.question,
-  //     value: item.respons[0]?.value,
-  //     comment: item.respons[0]?.comment,
-  //     sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
-  //       return {
-  //         id: subItem.id,
-  //         question: subItem.question,
-  //         value: subItem.respons[0]?.value,
-  //         comment: subItem.respons[0]?.comment,
-  //       }
-  //     }) : undefined
-  //   }
-  // })
-
   const responses = await readUserResponses({ userId: user.id, topicId })
 
   const mappedResponses = mapResponses(responses)
@@ -128,7 +109,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
   }
 
   const responses = await readAllResponseMetadata()
-  responses.map(response => {
+  const mappedResponses = responses.map(response => {
     const { province, city } = response;
 
     const area = !province ? 'Nasional' : `Subnasional, ${province}, ${city || ''}`
@@ -144,7 +125,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
   return res.code(200).send({
     message: 'success.',
     data: {
-      responses
+      responses: mappedResponses
     }
   })
 }

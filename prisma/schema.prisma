@@ -58,7 +58,6 @@ model Users {
 model Areas {
   id Int @id @default(autoincrement())
   name String
-  type AreaType
 }
 
 model Topics {

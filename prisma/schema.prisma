@@ -55,7 +55,7 @@ model Provinces {
   name String
 
   Cities Cities[]
-  Responses ResponseMetadata[]
+  // Responses ResponseMetadata[]
   @@map("Areas")
 }
 
@@ -77,7 +77,8 @@ model Topics {
 
 model ResponseMetadata {
   id Int @id @default(autoincrement())
-  provinceId Int?
+  // provinceId Int?
+  province String?
   city String?
   userId String @unique
   leader String
@@ -85,7 +86,7 @@ model ResponseMetadata {
   participants String
 
   responder Users @relation(fields: [userId],references: [id])
-  province Provinces? @relation(fields: [provinceId], references: [id])
+  // province Provinces? @relation(fields: [provinceId], references: [id])
 }
 
 model Instrument {

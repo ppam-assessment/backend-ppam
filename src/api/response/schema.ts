@@ -14,7 +14,7 @@ export const inputMetadataSchema = z.object({
     leader: z.string(),
     date: z.date().default(new Date(Date.now())),
     participant: z.string(),
-    provinceId: z.number().optional(),
+    province: z.string().optional(),
     city: z.string().optional()
 })
 

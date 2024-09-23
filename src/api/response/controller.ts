@@ -81,7 +81,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const mappedMetadata = {
     leader: metadata?.leader,
     date: metadata?.date,
-    area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
+    area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province}, ${metadata?.city || ''}`,
     participants: metadata?.participants
   }
 
@@ -112,7 +112,7 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
   const mappedResponses = responses.map(response => {
     const { province, city } = response;
 
-    const area = !province ? 'Nasional' : `Subnasional, ${province?.name}, ${city || ''}`
+    const area = !province ? 'Nasional' : `Subnasional, ${province}, ${city || ''}`
     return {
       submitter: response.responder.username,
       leader: response.leader,
@@ -154,7 +154,7 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const mappedMetadata = {
       leader: metadata?.leader,
       date: metadata?.date,
-      area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city || ''}`,
+      area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province}, ${metadata?.city || ''}`,
       participants: metadata?.participants
     }
 
@@ -175,17 +175,17 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
 
-  const { leader, date, participant, provinceId, city } = req.body
+  const { leader, date, participant, province, city } = req.body
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({ userId: user.id, provinceId, city, leader, participant, date })
+  await createResponseMetadata({ userId: user.id, province, city, leader, participant, date })
     .catch(async e => {
       const isPrismaErr = e instanceof Prisma.PrismaClientKnownRequestError
       const isUserIdErr = e.message.includes('userId')
 
       if (isPrismaErr && isUserIdErr) {
-        await updateResponseMetadata({ userId: user.id, provinceId, city, leader, date, participant })
+        await updateResponseMetadata({ userId: user.id, province, city, leader, date, participant })
         return res.code(200).send({
           message: `Response metadata updated for ${user.username}.`,
         })

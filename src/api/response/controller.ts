@@ -4,10 +4,12 @@ import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, InstrumentType, Prisma, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
-import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
+import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
+import groupResponsesByTopic from "../../utils/lib/groupResponsesByTopic.js";
+import mapResponses from "../../utils/lib/mapResponses.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -69,23 +71,30 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const { topic } = req.query as { topic?: string };
   const topicId = topic ? parseInt(topic, 10) : undefined;
 
-  const responses = (await readUserResponses({ userId: user.id, topicId })).map(item => {
-    return {
-      id: item.id,
-      number: item.number,
-      question: item.question,
-      value: item.respons[0]?.value,
-      comment: item.respons[0]?.comment,
-      sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
-        return {
-          id: subItem.id,
-          question: subItem.question,
-          value: subItem.respons[0]?.value,
-          comment: subItem.respons[0]?.comment,
-        }
-      }) : undefined
-    }
-  })
+  // const responses = (await readUserResponses({ userId: user.id, topicId })).map(item => {
+  //   return {
+  //     id: item.id,
+  //     number: item.number,
+  //     topicId: item.topicId,
+  //     question: item.question,
+  //     value: item.respons[0]?.value,
+  //     comment: item.respons[0]?.comment,
+  //     sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
+  //       return {
+  //         id: subItem.id,
+  //         question: subItem.question,
+  //         value: subItem.respons[0]?.value,
+  //         comment: subItem.respons[0]?.comment,
+  //       }
+  //     }) : undefined
+  //   }
+  // })
+
+  const responses = await readUserResponses({ userId: user.id, topicId })
+
+  const mappedResponses = mapResponses(responses)
+
+  const groupedResponses = groupResponsesByTopic(mappedResponses);
 
   const metadata = await readResponseMetadataByUserId({userId: user.id})
 
@@ -93,7 +102,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
     message: `Data added for ${user.username}.`,
     data: {
       metadata,
-      responses
+      responses: groupedResponses
     }
   })
 }
@@ -125,7 +134,9 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
 
   return res.code(200).send({
     message: 'success.',
-    data: responses
+    data: {
+      responses
+    }
   })
 }
 
@@ -146,27 +157,34 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const submitter = await readUserByUsername({ username }).catch(() => { throw new NotFound(`Submitter ${username} not found.`) })
 
   const response = await readUserResponses({ userId: submitter.id });
-  response.map(item => {
-    return {
-      id: item.id,
-      number: item.number,
-      question: item.question,
-      value: item.respons[0]?.value,
-      comment: item.respons[0]?.comment,
-      sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
-        return {
-          id: subItem.id,
-          question: subItem.question,
-          value: subItem.respons[0]?.value,
-          comment: subItem.respons[0]?.comment,
-        }
-      }) : undefined
-    }
-  })
+  // response.map(item => {
+  //   return {
+  //     id: item.id,
+  //     number: item.number,
+  //     question: item.question,
+  //     value: item.respons[0]?.value,
+  //     comment: item.respons[0]?.comment,
+  //     sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
+  //       return {
+  //         id: subItem.id,
+  //         question: subItem.question,
+  //         value: subItem.respons[0]?.value,
+  //         comment: subItem.respons[0]?.comment,
+  //       }
+  //     }) : undefined
+  //   }
+  // })
+  const mappedResponses = mapResponses(response);
+  const grouppedResponses = groupResponsesByTopic(mappedResponses)
+
+  const metadata = await readResponseMetadataByUsername({username: username})
 
   return res.code(200).send({
     message: 'success.',
-    data: response
+    data: {
+      metadata,
+      responses: grouppedResponses
+    }
   })
 }
 

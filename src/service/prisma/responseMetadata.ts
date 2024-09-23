@@ -64,6 +64,24 @@ export const readResponseMetadataByUserId = async({userId}: {userId: string}) =>
     return metadata
 }
 
+export const readResponseMetadataByUsername = async({username}: {username: string}) => {
+    const metadata = await prisma.responseMetadata.findFirst({
+        select: {
+            leader: true,
+            date: true,
+            participants: true,
+            area: true
+        },
+        where: {
+            responder: {
+                username: username
+            }
+        }
+    })
+
+    return metadata
+}
+
 export const updateResponseMetadata = async({userId, area, leader, date, participant}: {userId: string, area: string, leader: string, date: Date, participant: string}) => {
     const metadata = await prisma.responseMetadata.update({
         where: {

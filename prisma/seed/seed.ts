@@ -6,23 +6,23 @@ import areas from "./data/areas.js"
 
 async function main() {
 
-  await prisma.users.createMany({
-    data: users
-  })
+  // await prisma.users.createMany({
+  //   data: users
+  // })
 
-  await prisma.topics.createMany({
-    data: topics
-  })
+  // await prisma.topics.createMany({
+  //   data: topics
+  // })
 
-  for (const instrument of instruments) {
-    await prisma.instrument.create({
-      data: instrument,
-    })
-  }
+  // for (const instrument of instruments) {
+  //   await prisma.instrument.create({
+  //     data: instrument,
+  //   })
+  // }
 
-  await prisma.areas.createMany({
-    data: areas
-  })
+  // await prisma.provinces.createMany({
+  //   data: areas
+  // })
 
   console.log('Seeding completed.')
 }

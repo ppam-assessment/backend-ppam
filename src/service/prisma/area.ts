@@ -1,13 +1,19 @@
 import prisma from "../../config/prisma.js";
 
 export const readAreaChoices = async () => {
-    return await prisma.areas.findMany({
+    return await prisma.provinces.findMany({
         orderBy: {
-            type:'asc'
+            name:'asc'
         },
         select: {
-            type: true,
-            name: true
+            id: true,
+            name: true,
+            Cities: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            }
         }
     })
 }

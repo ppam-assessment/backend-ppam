@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { getAllInstrument } from "../../service/prisma/instrument.js";
 import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js"
 import { readAreaChoices } from "../../service/prisma/area.js";
-import { AreaType } from "@prisma/client";
 
 export const getAllInstrumentController = async (req: FastifyRequest, res: FastifyReply) => {
     const { from, to } = req.query as { from?: string, to?: string };
@@ -76,16 +75,8 @@ export const getAllInstrumentController = async (req: FastifyRequest, res: Fasti
 
 export const getAreaController = async (req: FastifyRequest, res: FastifyReply) => {
     const areaChoice = await readAreaChoices();
-    const groupedArea = areaChoice.reduce((acc, curr) => {
-        curr.type === AreaType.nasional ? acc['Nasional'].push(curr.name) : acc['Subnasional'].push(curr.name)
-
-        return acc;
-    }, {
-        Nasional: [],
-        Subnasional: []
-    } as any);
 
     return res.code(200).send({
-        data: groupedArea
+        data: areaChoice
     })
 }

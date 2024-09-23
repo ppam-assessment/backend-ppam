@@ -97,6 +97,12 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const groupedResponses = groupResponsesByTopic(mappedResponses);
 
   const metadata = await readResponseMetadataByUserId({userId: user.id})
+  const mappedMetadata = {
+    leader: metadata?.leader,
+    date: metadata?.date,
+    area: metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province}, ${metadata?.city || ''}`,
+    participants: metadata?.participants
+  }
 
   return res.code(200).send({
     message: `Data added for ${user.username}.`,
@@ -123,11 +129,14 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
 
   const responses = await readAllResponseMetadata()
   responses.map(response => {
+    const { province, city } = response;
+
+    const area = !province ? 'Nasional' : `Subnasional, ${province}, ${city || ''}`
     return {
       submitter: response.responder.username,
       leader: response.leader,
       date: response.date,
-      area: response.area,
+      area,
       participants: response.participants
     }
   })
@@ -157,32 +166,21 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const submitter = await readUserByUsername({ username }).catch(() => { throw new NotFound(`Submitter ${username} not found.`) })
 
   const response = await readUserResponses({ userId: submitter.id });
-  // response.map(item => {
-  //   return {
-  //     id: item.id,
-  //     number: item.number,
-  //     question: item.question,
-  //     value: item.respons[0]?.value,
-  //     comment: item.respons[0]?.comment,
-  //     sub: item.type === InstrumentType.sub ? item.sub.map(subItem => {
-  //       return {
-  //         id: subItem.id,
-  //         question: subItem.question,
-  //         value: subItem.respons[0]?.value,
-  //         comment: subItem.respons[0]?.comment,
-  //       }
-  //     }) : undefined
-  //   }
-  // })
   const mappedResponses = mapResponses(response);
   const grouppedResponses = groupResponsesByTopic(mappedResponses)
 
   const metadata = await readResponseMetadataByUsername({username: username})
+  const mappedMetadata = {
+      leader: metadata?.leader,
+      date: metadata?.date,
+      area: metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province}, ${metadata?.city || ''}`,
+      participants: metadata?.participants
+    }
 
   return res.code(200).send({
     message: 'success.',
     data: {
-      metadata,
+      metadata: mappedMetadata,
       responses: grouppedResponses
     }
   })
@@ -196,17 +194,17 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
 
-  const { area, leader, date, participant } = req.body
+  const { leader, date, participant, provinceId, city } = req.body
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({ userId: user.id, area, leader, participant, date })
+  await createResponseMetadata({ userId: user.id, provinceId, city, leader, participant, date })
     .catch(async e => {
       const isPrismaErr = e instanceof Prisma.PrismaClientKnownRequestError
       const isUserIdErr = e.message.includes('userId')
 
       if (isPrismaErr && isUserIdErr) {
-        await updateResponseMetadata({ userId: user.id, area, leader, date, participant })
+        await updateResponseMetadata({ userId: user.id, provinceId, city, leader, date, participant })
         return res.code(200).send({
           message: `Response metadata updated for ${user.username}.`,
         })

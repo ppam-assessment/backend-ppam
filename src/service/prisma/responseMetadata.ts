@@ -9,7 +9,13 @@ export const readAllResponseMetadata = async () => {
             leader: true,
             participants: true,
             date: true,
-            area: true,
+            city: true,
+            province: {
+                select: {
+                    id: true,
+                    name: true
+                }
+            },
             responder: {
                 select: {
                     username: true
@@ -34,14 +40,15 @@ export const readUserIdByMetadataId = async({metaId}: {metaId: number}) => {
     return userId;
 }
 
-export const createResponseMetadata = async({userId, area, leader, date, participant}: {userId: string, area: string, leader: string, date: Date, participant: string}) => {
+export const createResponseMetadata = async({userId, provinceId, leader, date, participant, city}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, city: string | undefined}) => {
     const metadata = await prisma.responseMetadata.create({
         data: {
             userId,
-            area,
+            provinceId,
             leader,
             date,
-            participants: participant
+            participants: participant,
+            city
         }
     })
 
@@ -54,7 +61,14 @@ export const readResponseMetadataByUserId = async({userId}: {userId: string}) =>
             leader: true,
             date: true,
             participants: true,
-            area: true
+            city: true,
+            province: {
+                select: {
+                    name: true,
+                    id: true
+                }
+            },
+            
         },
         where: {
             userId
@@ -70,8 +84,13 @@ export const readResponseMetadataByUsername = async({username}: {username: strin
             leader: true,
             date: true,
             participants: true,
-            area: true
-        },
+            city: true,
+            province: {
+                select: {
+                    name: true,
+                    id: true
+                }
+            }        },
         where: {
             responder: {
                 username: username
@@ -82,16 +101,17 @@ export const readResponseMetadataByUsername = async({username}: {username: strin
     return metadata
 }
 
-export const updateResponseMetadata = async({userId, area, leader, date, participant}: {userId: string, area: string, leader: string, date: Date, participant: string}) => {
+export const updateResponseMetadata = async({userId, provinceId, leader, date, participant, city}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, city: string | undefined}) => {
     const metadata = await prisma.responseMetadata.update({
         where: {
             userId,
         },
         data: {
-            area,
+            provinceId,
             leader,
             date,
-            participants: participant
+            participants: participant,
+            city
         }
     })
 

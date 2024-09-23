@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
 
-
 export const inputResponseSchema = z.object({
     userId: z.string().optional(),
     instrumentId: z.number({ required_error: "Instrument not found."}),
@@ -12,10 +11,11 @@ export const inputResponseSchema = z.object({
 }).array()
 
 export const inputMetadataSchema = z.object({
-    area: z.string({required_error: 'areaId is required.'}),
     leader: z.string(),
     date: z.date().default(new Date(Date.now())),
-    participant: z.string()
+    participant: z.string(),
+    provinceId: z.number().optional(),
+    city: z.string().optional()
 })
 
 export type InputResponseSchema = z.infer<typeof inputResponseSchema>

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
-import { accessStatus, InstrumentType, Prisma, Status } from "@prisma/client";
+import { accessStatus, Prisma, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
 import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";

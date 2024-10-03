@@ -1,4 +1,6 @@
+import { InstrumentType } from "@prisma/client";
 import prisma from "../../config/prisma.js";
+import { number } from "zod";
 
 export const getAllInstrument = async ({from, to}: {from: number | undefined, to: number | undefined}) => {
     const whereCondition = {
@@ -65,7 +67,30 @@ export const getResponseByUserId = async ({ userId }: { userId: string }) => {
         },
     })
 
-
     return responses;
 }
 
+export const updateInstrumentsQuestion = async ({ data }: { data: { id: number, question: string }[] }) => {
+    await Promise.all([
+        data.forEach(record => {
+            prisma.instrument.update({
+                where: {
+                    id: record.id
+                },
+                data: {
+                    question: record.question
+                }
+                // create: {
+                //     id: record.id,
+                //     question: record.question,
+                //     mainId: record.mainId,
+                //     number: record.number,
+                //     type: record?.type || InstrumentType.text,
+                //     topicId: record?.topicId || 0
+                // }
+            })
+        })
+    ])
+
+    return 1;
+}

@@ -10,12 +10,6 @@ export const readAllResponseMetadata = async () => {
             participants: true,
             date: true,
             city: true,
-            // province: {
-            //     select: {
-            //         id: true,
-            //         name: true
-            //     }
-            // },
             province: true,
             responder: {
                 select: {
@@ -46,7 +40,6 @@ export const createResponseMetadata = async({userId, provinceId, leader, date, p
         data: {
             userId,
             provinceId,
-            // province,
             leader,
             date,
             participants: participant,
@@ -64,12 +57,6 @@ export const readResponseMetadataByUserId = async({userId}: {userId: string}) =>
             date: true,
             participants: true,
             city: true,
-            // province: {
-            //     select: {
-            //         name: true,
-            //         id: true
-            //     }
-            // },
             province: true,
             
         },
@@ -88,12 +75,6 @@ export const readResponseMetadataByUsername = async({username}: {username: strin
             date: true,
             participants: true,
             city: true,
-            // province: {
-            //     select: {
-            //         name: true,
-            //         id: true
-            //     }
-            // }       
             province: true, 
             },
         where: {
@@ -113,7 +94,6 @@ export const updateResponseMetadata = async({userId, provinceId, leader, date, p
         },
         data: {
             provinceId,
-            // province,
             leader,
             date,
             participants: participant,

@@ -80,14 +80,6 @@ export const updateInstrumentsQuestion = async ({ data }: { data: { id: number, 
                 data: {
                     question: record.question
                 }
-                // create: {
-                //     id: record.id,
-                //     question: record.question,
-                //     mainId: record.mainId,
-                //     number: record.number,
-                //     type: record?.type || InstrumentType.text,
-                //     topicId: record?.topicId || 0
-                // }
             })
         })
     ])

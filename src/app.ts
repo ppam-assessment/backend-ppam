@@ -1,4 +1,3 @@
-// https://medium.com/@atatijr/token-based-authentication-with-fastify-jwt-and-typescript-1fa5cccc63c5
 import Fastify from 'fastify'
 import fastifyExpress from '@fastify/express'
 import fjwt, { FastifyJWT } from '@fastify/jwt'

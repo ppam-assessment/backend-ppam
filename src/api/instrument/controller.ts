@@ -14,6 +14,8 @@ export const getAllInstrumentController = async (req: FastifyRequest, res: Fasti
     const toNumber = to ? parseInt(to, 10) : undefined;
 
     const instruments = await getAllInstrument({ from: fromNumber, to: toNumber });
+    const areaChoice = await readAreaChoices();
+
     const result = instruments.map(instrument => {
         const { id, number, topicId, question, sub } = instrument;
         let { type } = instrument;
@@ -26,14 +28,12 @@ export const getAllInstrumentController = async (req: FastifyRequest, res: Fasti
                 }
                 type = 'dropdown'
                 break;
-
             case 'dropdownideal':
                 caseShape = {
                     choice: choiceIdeal
                 }
                 type = 'dropdown'
                 break;
-
             case 'checkbox':
                 caseShape = {
                     choice: choiceCheck
@@ -62,7 +62,11 @@ export const getAllInstrumentController = async (req: FastifyRequest, res: Fasti
                     })
                 }
                 break;
-
+            case 'dropdownarea':
+                caseShape = {
+                    choice: areaChoice
+                }
+                break;
             default:
                 break;
         }

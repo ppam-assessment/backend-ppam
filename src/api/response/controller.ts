@@ -175,17 +175,17 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.")
 
-  const { leader, date, participant, provinceId, city } = req.body
+  const { leader, date, participant, provinceId, cityId } = req.body
 
   if (user.status !== Status.submitter) throw new Forbidden("User doesn't have access.");
 
-  await createResponseMetadata({ userId: user.id, provinceId, city, leader, participant, date })
+  await createResponseMetadata({ userId: user.id, provinceId, cityId, leader, participant, date })
     .catch(async e => {
       const isPrismaErr = e instanceof Prisma.PrismaClientKnownRequestError
       const isUserIdErr = e.message.includes('userId')
 
       if (isPrismaErr && isUserIdErr) {
-        await updateResponseMetadata({ userId: user.id, provinceId, city, leader, date, participant })
+        await updateResponseMetadata({ userId: user.id, provinceId, cityId, leader, date, participant })
         return res.code(200).send({
           message: `Response metadata updated for ${user.username}.`,
         })

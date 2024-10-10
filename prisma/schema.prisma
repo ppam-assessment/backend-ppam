@@ -49,6 +49,7 @@ model Users {
   response Responses[]
   metadata ResponseMetadata?
   viewerAccess ViewerAccess?
+  submitterAccess SubmitterAccess?
 }
 
 model Provinces {
@@ -66,6 +67,7 @@ model Cities {
   name String
 
   province Provinces @relation(fields: [provinceId], references: [id])
+  Responses ResponseMetadata[]
 }
 
 model Topics {
@@ -79,8 +81,7 @@ model Topics {
 model ResponseMetadata {
   id Int @id @default(autoincrement())
   provinceId Int?
-  // province String?
-  city String?
+  cityId Int?
   userId String @unique
   leader String
   date DateTime @default(now())
@@ -88,6 +89,7 @@ model ResponseMetadata {
 
   responder Users @relation(fields: [userId],references: [id])
   province Provinces? @relation(fields: [provinceId], references: [id])
+  city Cities? @relation(fields: [cityId], references: [id])
 }
 
 model Instrument {
@@ -135,4 +137,15 @@ model ViewerAccess {
   date DateTime @default(now()) @updatedAt
 
   viewer Users @relation(fields: [userId], references: [id])
+}
+
+model SubmitterAccess {
+  id Int @id @default(autoincrement())
+  userId String @unique
+  status accessStatus @default(pending)
+  reason String?
+  rejectReason String?
+  date DateTime @default(now()) @updatedAt
+
+  submitter Users @relation(fields: [userId], references: [id])
 }

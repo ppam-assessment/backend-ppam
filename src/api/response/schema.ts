@@ -17,7 +17,7 @@ export const inputMetadataSchema = z.object({
     date: z.date().default(new Date(Date.now())),
     participant: z.string(),
     provinceId: z.number().optional(),
-    city: z.string().optional()
+    cityId: z.number().optional()
 })
 
 export type InputResponseSchema = z.infer<typeof inputResponseSchema>

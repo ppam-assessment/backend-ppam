@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import { buildJsonSchemas } from 'fastify-zod'
-import { viewStatus } from '../../utils/enum/viewAccess.js'
+import { actionAccess } from '../../utils/enum/actionAccess.js'
 
 export const postViewerAccessSchema = z.object({
     reason: z.string().optional()
 })
 
 export const putViewerAccessSchema = z.object({
-    status: z.nativeEnum(viewStatus),
+    status: z.nativeEnum(actionAccess),
     reason: z.string().optional(),
     rejectReason: z.string().optional()
 })

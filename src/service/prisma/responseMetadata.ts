@@ -1,6 +1,4 @@
-import { Prisma } from "@prisma/client";
 import prisma from "../../config/prisma.js"
-import { updateViewerAccess } from "./viewerAccess.js";
 
 export const readAllResponseMetadata = async () => {
     const listResponse = await prisma.responseMetadata.findMany({
@@ -35,15 +33,15 @@ export const readUserIdByMetadataId = async({metaId}: {metaId: number}) => {
     return userId;
 }
 
-export const createResponseMetadata = async({userId, provinceId, leader, date, participant, city}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, city: string | undefined}) => {
+export const createResponseMetadata = async({userId, provinceId, leader, date, participant, cityId}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, cityId: number | undefined}) => {
     const metadata = await prisma.responseMetadata.create({
         data: {
             userId,
             provinceId,
+            cityId,
             leader,
             date,
             participants: participant,
-            city
         }
     })
 
@@ -87,7 +85,7 @@ export const readResponseMetadataByUsername = async({username}: {username: strin
     return metadata
 }
 
-export const updateResponseMetadata = async({userId, provinceId, leader, date, participant, city}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, city: string | undefined}) => {
+export const updateResponseMetadata = async({userId, provinceId, leader, date, participant, cityId}: {userId: string, provinceId: number | undefined, leader: string, date: Date, participant: string, cityId: number | undefined}) => {
     const metadata = await prisma.responseMetadata.update({
         where: {
             userId,
@@ -97,7 +95,6 @@ export const updateResponseMetadata = async({userId, provinceId, leader, date, p
             leader,
             date,
             participants: participant,
-            city
         }
     })
 

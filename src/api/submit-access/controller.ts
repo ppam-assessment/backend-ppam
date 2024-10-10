@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Status } from "@prisma/client";
-import { createViewerAccess, readAllViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
-import { PostViewerAccessSchema, PutViewerAccessSchema } from "./schema.js";
+import { createSubmitterAccess, readAllSubmitterAccess, readSubmitterAccessByUserId, updateSubmitterAccess } from "../../service/prisma/submitterAccess.js";
+import { PostSubmitterAccessSchema, PutSubmitterAccessSchema } from "./schema.js";
 import { actionAccess } from "../../utils/enum/actionAccess.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
@@ -10,7 +10,7 @@ import { Conflict } from "../../exceptions/Conflict.js";
 import { UnprocessableEntity } from "../../exceptions/UnprocessableEntity.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
 
-export const getViewerAccessController = async (req: FastifyRequest, res: FastifyReply) => {
+export const getSubmitterAccessController = async (req: FastifyRequest, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
     console.log('Session not found');
     const { user } = await getSessionUser({ id: session.id }).catch( () => {
@@ -21,11 +21,11 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
 
     switch (user.status) {
         case Status.admin:
-            const viewerAccess = await readAllViewerAccess();
-            data = viewerAccess.map( item => {
+            const submitterAccess = await readAllSubmitterAccess();
+            data = submitterAccess.map( item => {
                 return {
                     date: item.date,
-                    username: item.viewer.username,
+                    username: item.submitter.username,
                     reason: item.reason,
                     rejectReason: item.rejectReason,
                     status: item.status
@@ -33,7 +33,7 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
             })
             break;
         case Status.viewer:
-            const viewAccess = await readViewerAccessByUserId({userId: user.id})
+            const viewAccess = await readSubmitterAccessByUserId({userId: user.id})
             data = {
                 status: viewAccess?.status,
                 reason: viewAccess?.reason || '-',
@@ -51,7 +51,7 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
     })
 }
 
-export const postViewerAccessController = async (req: FastifyRequest<{Body: PostViewerAccessSchema}>, res: FastifyReply) => {
+export const postSubmitterAccessController = async (req: FastifyRequest<{Body: PostSubmitterAccessSchema}>, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
     const { user } = await getSessionUser({ id: session.id }).catch( () => {
         throw new NotFound("User not found.")
@@ -59,42 +59,42 @@ export const postViewerAccessController = async (req: FastifyRequest<{Body: Post
 
     const {reason} = req.body
 
-    const access = await readViewerAccessByUserId({userId: user.id})
+    const access = await readSubmitterAccessByUserId({userId: user.id})
 
-    if (user.status !== Status.viewer) {
+    if (user.status !== Status.submitter) {
         throw new Forbidden("User doesn't have access.");
     } else if (access) {
         throw new Conflict(`View access already created for ${user.username}.`)
     }
 
-    await createViewerAccess({ userId: user.id, reason });
+    await createSubmitterAccess({ userId: user.id, reason });
 
     return res.code(201).send({
         message: `Access requested for ${user.username}.`,
     })
 }
 
-export const putResubmitAccessController = async (req: FastifyRequest<{ Body: PutViewerAccessSchema }>, res: FastifyReply) => {
+export const putResubmitAccessController = async (req: FastifyRequest<{ Body: PutSubmitterAccessSchema }>, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
     const { user } = await getSessionUser({ id: session.id }).catch( () => {
         throw new NotFound("User not found.")
     })
-    const isViewer = user.status === Status.viewer;
+    const isSubmitter = user.status === Status.submitter;
 
     const { status, reason } = req.body
 
-    if( !isViewer || status === actionAccess.approve || status === actionAccess.reject ) throw new NotFound("User doesn't have access."); 
+    if( !isSubmitter || status === actionAccess.approve || status === actionAccess.reject ) throw new NotFound("User doesn't have access."); 
 
     const updatedStatus = accessStatus.pending
 
-    await updateViewerAccess({userId: user.id , status: updatedStatus, reason: isViewer ? reason : undefined })
+    await updateSubmitterAccess({userId: user.id , status: updatedStatus, reason: isSubmitter ? reason : undefined })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${user.username}`,
     })
 }
 
-export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutViewerAccessSchema }>, res: FastifyReply) => {
+export const putSubmitterAccessController = async (req: FastifyRequest<{ Body: PutSubmitterAccessSchema }>, res: FastifyReply) => {
     const session = await req.jwtVerify() as TokenPayload
     const { user } = await getSessionUser({ id: session.id }).catch( () => {
         throw new NotFound("User not found.")
@@ -115,7 +115,7 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
 
     const isViewer = user.status === Status.viewer;
     
-    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason })
+    await updateSubmitterAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${viewer.username}`

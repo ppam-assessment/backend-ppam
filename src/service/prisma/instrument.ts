@@ -28,9 +28,12 @@ export const getAllInstrument = async ({from, to}: {from: number | undefined, to
                 }
             },
         },
-        orderBy: {
+        orderBy: [{
+            topicId: 'asc'
+        },
+        {
             number: 'asc'
-        }
+        }]
     })
 
     return instrument;

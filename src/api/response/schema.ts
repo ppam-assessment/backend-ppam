@@ -3,7 +3,9 @@ import { buildJsonSchemas } from 'fastify-zod'
 
 export const inputResponseSchema = z.object({
     userId: z.string().optional(),
-    instrumentId: z.number({ required_error: "Instrument not found."}),
+    instrumentId: z.number({ required_error: "Instrument not found."}).refine((val) => val < 196 || val > 199, {
+        message: "instrumentId for topic-0 not allowed.",
+      }),
     value: z.union([z.string(), z.string().array() ]),
     score: z.number().default(0),
     comment: z.string().optional(),

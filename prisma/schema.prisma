@@ -24,6 +24,7 @@ enum InstrumentType {
   dropdown
   dropdownya
   dropdownideal
+  dropdownarea
   checkbox
   text
   date

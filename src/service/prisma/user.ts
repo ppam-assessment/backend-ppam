@@ -3,6 +3,8 @@ import prisma from "../../config/prisma.js";
 import { Conflict } from "../../exceptions/Conflict.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 
+const blockedStatus = Status.submitter_blocked || Status.viewer_blocked
+
 export const getUserByEmail = async ({ email }: { email: string }) => {
     const user = await prisma.users.findFirst({
         where: {
@@ -10,7 +12,7 @@ export const getUserByEmail = async ({ email }: { email: string }) => {
         }
     })
 
-    if (user?.status === Status.blocked) throw new Forbidden(`User ${user.username} was blocked.`)
+    if (user?.status === blockedStatus) throw new Forbidden(`User ${user.username} was blocked.`)
 
     return user;
 }
@@ -22,7 +24,7 @@ export const getUserByName = async ({ username }: { username: string }) => {
         }
     })
 
-    if (user?.status === Status.blocked) throw new Forbidden(`User ${user.username} was blocked.`)
+    if (user?.status === blockedStatus) throw new Forbidden(`User ${user.username} was blocked.`)
 
     return user;
 }
@@ -65,16 +67,25 @@ export const validateUserRole = async ({ id, status }: { id: string, status: Sta
     }
 }
 
-export const blockUser = async ({ username }: { username: string }) => {
+export const blockUser = async ({ username, status }: { username: string, status: Status }) => {
+    let blockStatus: Status
+    if (status === Status.viewer) {
+        blockStatus = Status.viewer_blocked 
+    }else if (status === Status.submitter) {
+        blockStatus = Status.submitter_blocked
+    }else{
+        throw Error('User cannot blocked.')
+    }
+
     const user = await prisma.users.update({
         where: {
             username,
             status: {
-                notIn: ['admin', 'blocked']
+                in: [ Status.submitter, Status.viewer ]
             }
         },
         data: {
-            status: Status.blocked
+            status: blockStatus
         }
     })
 
@@ -86,7 +97,7 @@ export const readAllUserByStatus = async ({ admin, submitter, viewer, blocked }:
     if (admin) statusArr.push(Status.admin)
     if (submitter) statusArr.push(Status.submitter)
     if (viewer) statusArr.push(Status.viewer)
-    if (blocked) statusArr.push(Status.blocked)
+    if (blocked) statusArr.push(blockedStatus)
 
     const whereCondition = {
         status: {

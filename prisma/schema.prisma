@@ -17,7 +17,8 @@ enum Status {
   admin
   submitter
   viewer
-  blocked
+  viewer_blocked
+  submitter_blocked
 }
 
 enum InstrumentType {

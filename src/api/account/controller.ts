@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CreateUserSchema, createUserSchema, LoginUserSchema, loginUserSchema } from "./schema.js";
-import { blockUser, createUser, getUserByEmail, getUserByName, readAllUserByStatus } from "../../service/prisma/user.js";
+import { blockUser, createUser, getUserByEmail, getUserByName, readAllUserByStatus, readUserByUsername } from "../../service/prisma/user.js";
 import { addSession, getSessionUser } from "../../service/prisma/session.js";
 import getNextDay from "../../utils/lib/timePeriod.js";
 import { Status } from "@prisma/client";
@@ -102,8 +102,9 @@ export const putUserStatusBlocked = async (req: FastifyRequest, res: FastifyRepl
   }
 
   const { username } = req.params as { username: string }
+  const targetUser = await readUserByUsername({username: username})
 
-  await blockUser({ username })
+  await blockUser({ username, status: targetUser.status })
 
   return res.code(200).send({
     message: `User ${user.username} has been blocked.`

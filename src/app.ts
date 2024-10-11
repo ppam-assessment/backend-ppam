@@ -11,6 +11,7 @@ import { userSchemas } from './api/account/schema.js'
 import { responseSchemas } from './api/response/schema.js'
 import { viewerAccessSchema } from './api/view-access/schema.js'
 import { instrumentSchema } from './api/instrument/schema.js'
+import { submitterAccessSchema } from './api/submit-access/schema.js'
 
 
 const app = Fastify({
@@ -37,7 +38,7 @@ app.register(fCookie, {
   hook: 'preHandler',
 })
 
-for (let schema of [...userSchemas, ...responseSchemas, ...viewerAccessSchema, ...instrumentSchema]) {
+for (let schema of [...userSchemas, ...responseSchemas, ...viewerAccessSchema, ...instrumentSchema, ...submitterAccessSchema]) {
   app.addSchema(schema)
 }
 

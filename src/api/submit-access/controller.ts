@@ -32,7 +32,7 @@ export const getSubmitterAccessController = async (req: FastifyRequest, res: Fas
                 }
             })
             break;
-        case Status.viewer:
+        case Status.submitter:
             const viewAccess = await readSubmitterAccessByUserId({userId: user.id})
             data = {
                 status: viewAccess?.status,

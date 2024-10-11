@@ -3,6 +3,7 @@ import userRoutes from "./account/route.js";
 import instrumentRoutes from "./instrument/route.js"
 import responseRoutes from "./response/route.js"
 import viewAccessRoutes from "./view-access/route.js"
+import submitAccessRoutes from "./submit-access/route.js"
 
 export default function (app: any, opts: any, done: any) {
   app.get("/", async function testHandler(req: FastifyRequest, res: FastifyReply) {
@@ -16,6 +17,7 @@ export default function (app: any, opts: any, done: any) {
   app.register(instrumentRoutes, { prefix: '/instrument' })
   app.register(responseRoutes, { prefix: '/response' })
   app.register(viewAccessRoutes, { prefix: '/view-access' })
+  app.register(submitAccessRoutes, { prefix: '/submit-access' })
 
   done();
 }

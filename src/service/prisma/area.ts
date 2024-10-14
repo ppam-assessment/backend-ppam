@@ -8,7 +8,7 @@ export const readAreaChoices = async () => {
         select: {
             id: true,
             name: true,
-            Cities: {
+            cities: {
                 select: {
                     id: true,
                     name: true

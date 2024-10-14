@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { getAllInstrument, updateInstrumentsQuestion } from "../../service/prisma/instrument.js";
+import { getAllInstrument, updateInstrumentQuestion } from "../../service/prisma/instrument.js";
 import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js"
 import { readAreaChoices } from "../../service/prisma/area.js";
 import { PutInstrumentsSchema } from "./schema.js";
@@ -103,7 +103,11 @@ export const putInstrumentsQuestionController = async (req: FastifyRequest<{ Bod
 
     const arrData = req.body;
 
-    await updateInstrumentsQuestion({ data: arrData })
+    arrData.forEach( async data => {
+        await updateInstrumentQuestion({ id: data.id, question: data.question }).catch( e => res.send({
+            error: e.message
+        }))
+    });
 
     return res.code(200).send({
         message: 'Instrument question updated.'

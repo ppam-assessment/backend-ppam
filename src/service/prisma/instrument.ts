@@ -73,19 +73,15 @@ export const getResponseByUserId = async ({ userId }: { userId: string }) => {
     return responses;
 }
 
-export const updateInstrumentsQuestion = async ({ data }: { data: { id: number, question: string }[] }) => {
-    await Promise.all([
-        data.forEach(record => {
-            prisma.instrument.update({
-                where: {
-                    id: record.id
-                },
-                data: {
-                    question: record.question
-                }
-            })
-        })
-    ])
+export const updateInstrumentQuestion = async ({ id, question }: { id: number, question: string }) => {
+    await prisma.instrument.updateMany({
+        where: {
+            id
+        },
+        data: {
+            question
+        }
+    })
 
     return 1;
 }

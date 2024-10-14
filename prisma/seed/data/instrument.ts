@@ -1,4 +1,4 @@
-import { Instrument, InstrumentType } from "@prisma/client";
+import { InstrumentType } from "@prisma/client";
 
 function createSubYa(topicId: number, ...questions: Array<string>) {
   const subQuestions = questions.map( question => {

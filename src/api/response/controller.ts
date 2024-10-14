@@ -81,7 +81,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
   const mappedMetadata = {
     leader: metadata?.leader,
     date: metadata?.date,
-    area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province}, ${metadata?.city || ''}`,
+    area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province.name}, ${metadata?.city?.name || ''}`,
     participants: metadata?.participants
   }
 

@@ -49,6 +49,10 @@ function createSubCheck(topicId: number, ...questions: Array<string>) {
 }
 
 export default [
+  { number: 1, topicId: 0, question: "Siapa yang Memimpin Penilaian?", type: InstrumentType.text },
+  { number: 2, topicId: 0, question: "Tanggal Penilaian", type: InstrumentType.date },
+  { number: 3, topicId: 0, question: "Pada tingkat apa penilaian dilakukan", type: InstrumentType.dropdownarea },
+  { number: 4, topicId: 0, question: "Peserta yang terlibat dalam penilaian?", type: InstrumentType.text },
   { number: 1, topicId: 1, question: "Apakah negara Anda mempunyai Kebijakan dan/atau Program Kesiapsiagaan dan/atau Tanggap Darurat Nasional? Jika ya, silakan tentukan dan sebutkan di kotak komentar jenis keadaan darurat yang dicakupnya (misalnya bencana alam, konflik, keadaan darurat kesehatan masyarakat, dll.)", type: InstrumentType.dropdownya },
   { number: 2, topicId: 1, question: "Apakah negara Anda mempunyai Program Kesiapsiagaan Kesehatan Nasional dan/atau Tanggap Darurat? Jika ya, harap sebutkan", type: InstrumentType.dropdownya },
   { number: 3, topicId: 1, question: "Apakah program ini dilaksanakan di tingkat daerah? Jika ya, harap sebutkan", type: InstrumentType.dropdownya },

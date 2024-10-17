@@ -3,6 +3,7 @@ import topics from "./data/topic.js"
 import users from "./data/users.js"
 import instruments from "./data/instrument.js"
 import areas from "./data/areas.js"
+import citiesData from "./data/citiesData.js"
 
 async function main() {
 

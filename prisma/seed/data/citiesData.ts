@@ -1,4 +1,4 @@
-const citiesData = [
+export default [
     // Aceh (provinceId: 1)
     { provinceId: 1, name: 'Kabupaten Aceh Barat' },
     { provinceId: 1, name: 'Kabupaten Aceh Barat Daya' },

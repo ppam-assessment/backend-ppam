@@ -4,12 +4,13 @@ import users from "./data/users.js"
 import instruments from "./data/instrument.js"
 import areas from "./data/areas.js"
 import citiesData from "./data/citiesData.js"
+import submitterAccessData from "./data/submitterAccess.js"
 
 async function main() {
 
-  // await prisma.users.createMany({
-  //   data: users
-  // })
+  await prisma.users.createMany({
+    data: users
+  })
 
   // await prisma.topics.createMany({
   //   data: topics
@@ -23,6 +24,10 @@ async function main() {
 
   await prisma.cities.createMany({
     data: citiesData
+  })
+
+  await prisma.submitterAccess.createMany({
+    data: submitterAccessData
   })
 
   // await prisma.provinces.createMany({

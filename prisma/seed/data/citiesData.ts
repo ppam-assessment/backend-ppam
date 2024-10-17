@@ -1,4 +1,4 @@
-export default [
+const citiesData1 = [
     // Aceh (provinceId: 1)
     { provinceId: 1, name: 'Kabupaten Aceh Barat' },
     { provinceId: 1, name: 'Kabupaten Aceh Barat Daya' },
@@ -122,3 +122,145 @@ export default [
     { provinceId: 3, name: 'Kota Sawahlunto' },
     { provinceId: 3, name: 'Kota Solok' }
   ];
+
+  const citiesData2 = [
+    // Sumatera Utara (provinceId: 2)
+    { provinceId: 2, name: 'Kabupaten Asahan' },
+    { provinceId: 2, name: 'Kabupaten Batubara' },
+    { provinceId: 2, name: 'Kabupaten Dairi' },
+    { provinceId: 2, name: 'Kabupaten Deli Serdang' },
+    { provinceId: 2, name: 'Kabupaten Humbang Hasundutan' },
+    { provinceId: 2, name: 'Kabupaten Karo' },
+    { provinceId: 2, name: 'Kabupaten Labuhanbatu' },
+    { provinceId: 2, name: 'Kabupaten Labuhanbatu Selatan' },
+    { provinceId: 2, name: 'Kabupaten Labuhanbatu Utara' },
+    { provinceId: 2, name: 'Kabupaten Langkat' },
+    { provinceId: 2, name: 'Kabupaten Mandailing Natal' },
+    { provinceId: 2, name: 'Kabupaten Nias' },
+    { provinceId: 2, name: 'Kabupaten Nias Barat' },
+    { provinceId: 2, name: 'Kabupaten Nias Selatan' },
+    { provinceId: 2, name: 'Kabupaten Nias Utara' },
+    { provinceId: 2, name: 'Kabupaten Padang Lawas' },
+    { provinceId: 2, name: 'Kabupaten Padang Lawas Utara' },
+    { provinceId: 2, name: 'Kabupaten Pakpak Bharat' },
+    { provinceId: 2, name: 'Kabupaten Samosir' },
+    { provinceId: 2, name: 'Kabupaten Serdang Bedagai' },
+    { provinceId: 2, name: 'Kabupaten Simalungun' },
+    { provinceId: 2, name: 'Kabupaten Tapanuli Selatan' },
+    { provinceId: 2, name: 'Kabupaten Tapanuli Tengah' },
+    { provinceId: 2, name: 'Kabupaten Tapanuli Utara' },
+    { provinceId: 2, name: 'Kabupaten Toba Samosir' },
+    { provinceId: 2, name: 'Kota Binjai' },
+    { provinceId: 2, name: 'Kota Gunungsitoli' },
+    { provinceId: 2, name: 'Kota Medan' },
+    { provinceId: 2, name: 'Kota Padangsidempuan' },
+    { provinceId: 2, name: 'Kota Pematangsiantar' },
+    { provinceId: 2, name: 'Kota Sibolga' },
+    { provinceId: 2, name: 'Kota Tanjungbalai' },
+    { provinceId: 2, name: 'Kota Tebing Tinggi' },
+  
+    // Sumatera Selatan (provinceId: 4)
+    { provinceId: 4, name: 'Kabupaten Banyuasin' },
+    { provinceId: 4, name: 'Kabupaten Empat Lawang' },
+    { provinceId: 4, name: 'Kabupaten Lahat' },
+    { provinceId: 4, name: 'Kabupaten Muara Enim' },
+    { provinceId: 4, name: 'Kabupaten Musi Banyuasin' },
+    { provinceId: 4, name: 'Kabupaten Musi Rawas' },
+    { provinceId: 4, name: 'Kabupaten Musi Rawas Utara' },
+    { provinceId: 4, name: 'Kabupaten Ogan Ilir' },
+    { provinceId: 4, name: 'Kabupaten Ogan Komering Ilir' },
+    { provinceId: 4, name: 'Kabupaten Ogan Komering Ulu' },
+    { provinceId: 4, name: 'Kabupaten Ogan Komering Ulu Selatan' },
+    { provinceId: 4, name: 'Kabupaten Ogan Komering Ulu Timur' },
+    { provinceId: 4, name: 'Kabupaten Penukal Abab Lematang Ilir' },
+    { provinceId: 4, name: 'Kota Lubuklinggau' },
+    { provinceId: 4, name: 'Kota Pagar Alam' },
+    { provinceId: 4, name: 'Kota Palembang' },
+    { provinceId: 4, name: 'Kota Prabumulih' },
+  
+    // Riau (provinceId: 5)
+    { provinceId: 5, name: 'Kabupaten Bengkalis' },
+    { provinceId: 5, name: 'Kabupaten Indragiri Hilir' },
+    { provinceId: 5, name: 'Kabupaten Indragiri Hulu' },
+    { provinceId: 5, name: 'Kabupaten Kampar' },
+    { provinceId: 5, name: 'Kabupaten Kepulauan Meranti' },
+    { provinceId: 5, name: 'Kabupaten Kuantan Singingi' },
+    { provinceId: 5, name: 'Kabupaten Pelalawan' },
+    { provinceId: 5, name: 'Kabupaten Rokan Hilir' },
+    { provinceId: 5, name: 'Kabupaten Rokan Hulu' },
+    { provinceId: 5, name: 'Kabupaten Siak' },
+    { provinceId: 5, name: 'Kota Dumai' },
+    { provinceId: 5, name: 'Kota Pekanbaru' },
+  
+    // Kepulauan Riau (provinceId: 6)
+    { provinceId: 6, name: 'Kabupaten Bintan' },
+    { provinceId: 6, name: 'Kabupaten Karimun' },
+    { provinceId: 6, name: 'Kabupaten Kepulauan Anambas' },
+    { provinceId: 6, name: 'Kabupaten Lingga' },
+    { provinceId: 6, name: 'Kabupaten Natuna' },
+    { provinceId: 6, name: 'Kota Batam' },
+    { provinceId: 6, name: 'Kota Tanjung Pinang' },
+  
+    // Jambi (provinceId: 7)
+    { provinceId: 7, name: 'Kabupaten Batanghari' },
+    { provinceId: 7, name: 'Kabupaten Bungo' },
+    { provinceId: 7, name: 'Kabupaten Kerinci' },
+    { provinceId: 7, name: 'Kabupaten Merangin' },
+    { provinceId: 7, name: 'Kabupaten Muaro Jambi' },
+    { provinceId: 7, name: 'Kabupaten Sarolangun' },
+    { provinceId: 7, name: 'Kabupaten Tanjung Jabung Barat' },
+    { provinceId: 7, name: 'Kabupaten Tanjung Jabung Timur' },
+    { provinceId: 7, name: 'Kabupaten Tebo' },
+    { provinceId: 7, name: 'Kota Jambi' },
+    { provinceId: 7, name: 'Kota Sungai Penuh' },
+  
+    // Bengkulu (provinceId: 8)
+    { provinceId: 8, name: 'Kabupaten Bengkulu Selatan' },
+    { provinceId: 8, name: 'Kabupaten Bengkulu Tengah' },
+    { provinceId: 8, name: 'Kabupaten Bengkulu Utara' },
+    { provinceId: 8, name: 'Kabupaten Kaur' },
+    { provinceId: 8, name: 'Kabupaten Kepahiang' },
+    { provinceId: 8, name: 'Kabupaten Lebong' },
+    { provinceId: 8, name: 'Kabupaten Mukomuko' },
+    { provinceId: 8, name: 'Kabupaten Rejang Lebong' },
+    { provinceId: 8, name: 'Kabupaten Seluma' },
+    { provinceId: 8, name: 'Kota Bengkulu' },
+  
+    // Bangka Belitung (provinceId: 9)
+    { provinceId: 9, name: 'Kabupaten Bangka' },
+    { provinceId: 9, name: 'Kabupaten Bangka Barat' },
+    { provinceId: 9, name: 'Kabupaten Bangka Selatan' },
+    { provinceId: 9, name: 'Kabupaten Bangka Tengah' },
+    { provinceId: 9, name: 'Kabupaten Belitung' },
+    { provinceId: 9, name: 'Kabupaten Belitung Timur' },
+    { provinceId: 9, name: 'Kota Pangkal Pinang' },
+  
+    // Lampung (provinceId: 10)
+    { provinceId: 10, name: 'Kabupaten Lampung Tengah' },
+    { provinceId: 10, name: 'Kabupaten Lampung Utara' },
+    { provinceId: 10, name: 'Kabupaten Lampung Selatan' },
+    { provinceId: 10, name: 'Kabupaten Lampung Barat' },
+    { provinceId: 10, name: 'Kabupaten Lampung Timur' },
+    { provinceId: 10, name: 'Kabupaten Mesuji' },
+    { provinceId: 10, name: 'Kabupaten Pesawaran' },
+    { provinceId: 10, name: 'Kabupaten Pesisir Barat' },
+    { provinceId: 10, name: 'Kabupaten Pringsewu' },
+    { provinceId: 10, name: 'Kabupaten Tulang Bawang' },
+    { provinceId: 10, name: 'Kabupaten Tulang Bawang Barat' },
+    { provinceId: 10, name: 'Kabupaten Tanggamus' },
+    { provinceId: 10, name: 'Kabupaten Way Kanan' },
+    { provinceId: 10, name: 'Kota Bandar Lampung' },
+    { provinceId: 10, name: 'Kota Metro' },
+  
+    // Banten (provinceId: 11)
+    { provinceId: 11, name: 'Kabupaten Lebak' },
+    { provinceId: 11, name: 'Kabupaten Pandeglang' },
+    { provinceId: 11, name: 'Kabupaten Serang' },
+    { provinceId: 11, name: 'Kabupaten Tangerang' },
+    { provinceId: 11, name: 'Kota Cilegon' },
+    { provinceId: 11, name: 'Kota Serang' },
+    { provinceId: 11, name: 'Kota Tangerang' },
+    { provinceId: 11, name: 'Kota Tangerang Selatan' }
+  ];
+
+  export default citiesData2;

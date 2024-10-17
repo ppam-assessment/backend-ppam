@@ -35,11 +35,14 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
         case Status.viewer:
             const viewAccess = await readViewerAccessByUserId({ userId: user.id })
             data = viewAccess.map((record) => {
+                const { city, province} = record
+                const area = city ? `Kota/Kab (${city.name})` : province ? `Provinsi (${province.name})` : 'Nasional'
                 return {
                     status: record?.status,
                     reason: record?.reason || '-',
                     rejectsReaseon: record?.rejectReason || '-',
-                    date: record?.date
+                    date: record?.date,
+                    area
                 }
             })      
             break;

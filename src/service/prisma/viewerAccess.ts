@@ -39,7 +39,9 @@ export const readViewerAccessByUserId = async ({userId, provinceId, cityId}: {us
             date: true,
             rejectReason: true,
             provinceId: true,
-            cityId: true
+            cityId: true,
+            province: true,
+            city: true
         }
     })
 

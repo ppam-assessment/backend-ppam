@@ -22,13 +22,16 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
     switch (user.status) {
         case Status.admin:
             const viewerAccess = await readAllViewerAccess();
-            data = viewerAccess.map( item => {
+            data = viewerAccess.map( record => {
+                const { city, province} = record
+                const area = city ? `Kota/Kab (${city.name})` : province ? `Provinsi (${province.name})` : 'Nasional'
                 return {
-                    date: item.date,
-                    username: item.viewer.username,
-                    reason: item.reason,
-                    rejectReason: item.rejectReason,
-                    status: item.status
+                    date: record.date,
+                    username: record.viewer.username,
+                    reason: record.reason,
+                    rejectReason: record.rejectReason,
+                    status: record.status,
+                    area
                 }
             })
             break;

@@ -3,13 +3,17 @@ import { buildJsonSchemas } from 'fastify-zod'
 import { actionAccess } from '../../utils/enum/actionAccess.js'
 
 export const postViewerAccessSchema = z.object({
-    reason: z.string().optional()
+    reason: z.string().optional(),
+    provinceId: z.number().optional(),
+    cityId: z.number().optional()
 })
 
 export const putViewerAccessSchema = z.object({
     status: z.nativeEnum(actionAccess),
     reason: z.string().optional(),
-    rejectReason: z.string().optional()
+    rejectReason: z.string().optional(),
+    // provinceId: z.number().optional(),
+    // cityId: z.number().optional()
 })
 
 export type PutViewerAccessSchema = z.infer<typeof putViewerAccessSchema>

@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma.js"
 
-export const readAllResponseMetadata = async () => {
+export const readAllResponseMetadata = async ({ provinceIds, cityIds}: {provinceIds?: number[] | null, cityIds?: number[] | null}) => {
     const listResponse = await prisma.responseMetadata.findMany({
         select: {
             id: true,
@@ -13,6 +13,14 @@ export const readAllResponseMetadata = async () => {
                 select: {
                     username: true
                 }
+            }
+        },
+        where: {
+            provinceId: {
+                in: provinceIds
+            },
+            cityId: {
+                in: cityIds
             }
         }
     });
@@ -48,7 +56,7 @@ export const createResponseMetadata = async({userId, provinceId, leader, date, p
     return metadata;
 }
 
-export const readResponseMetadataByUserId = async({userId}: {userId: string}) => {
+export const readResponseMetadataByUserId = async({userId, }: {userId: string}) => {
     const metadata = await prisma.responseMetadata.findFirst({
         select: {
             leader: true,
@@ -56,10 +64,9 @@ export const readResponseMetadataByUserId = async({userId}: {userId: string}) =>
             participants: true,
             city: true,
             province: true,
-            
         },
         where: {
-            userId
+            userId,
         }
     })
 

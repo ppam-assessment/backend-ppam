@@ -58,7 +58,8 @@ model Provinces {
   name String
 
   cities Cities[]
-  Responses ResponseMetadata[]
+  responses ResponseMetadata[]
+  viewAcess ViewerAccess[]
   @@map("Areas")
 }
 
@@ -68,7 +69,8 @@ model Cities {
   name String
 
   province Provinces @relation(fields: [provinceId], references: [id])
-  Responses ResponseMetadata[]
+  responses ResponseMetadata[]
+  viewAcess ViewerAccess[]
 }
 
 model Topics {
@@ -115,6 +117,8 @@ model Responses {
   value String
   score Int
   comment String?
+  provinceId Int?
+  cityId Int?
 
   instrument Instrument @relation(fields: [instrumentId], references: [id])
   responder Users @relation(fields: [userId],references: [id])
@@ -136,8 +140,12 @@ model ViewerAccess {
   reason String?
   rejectReason String?
   date DateTime @default(now()) @updatedAt
+  provinceId Int?
+  cityId Int?
 
   viewer Users @relation(fields: [userId], references: [id])
+  province Provinces? @relation(fields: [provinceId], references: [id])
+  city Cities? @relation(fields: [cityId], references: [id])
 }
 
 model SubmitterAccess {

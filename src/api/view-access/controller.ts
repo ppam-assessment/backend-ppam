@@ -33,13 +33,15 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
             })
             break;
         case Status.viewer:
-            const viewAccess = await readViewerAccessByUserId({userId: user.id})
-            data = {
-                status: viewAccess?.status,
-                reason: viewAccess?.reason || '-',
-                rejectsReaseon: viewAccess?.rejectReason || '-',
-                date: viewAccess?.date
-            }        
+            const viewAccess = await readViewerAccessByUserId({ userId: user.id })
+            data = viewAccess.map((record) => {
+                return {
+                    status: record?.status,
+                    reason: record?.reason || '-',
+                    rejectsReaseon: record?.rejectReason || '-',
+                    date: record?.date
+                }
+            })      
             break;
         default:
             throw new Forbidden("User doesn't have access.");
@@ -57,17 +59,15 @@ export const postViewerAccessController = async (req: FastifyRequest<{Body: Post
         throw new NotFound("User not found.")
     })
 
-    const {reason} = req.body
+    const {reason, provinceId, cityId} = req.body
 
-    const access = await readViewerAccessByUserId({userId: user.id})
+    // const access = await readViewerAccessByUserId({userId: user.id})
 
     if (user.status !== Status.viewer) {
         throw new Forbidden("User doesn't have access.");
-    } else if (access) {
-        throw new Conflict(`View access already created for ${user.username}.`)
     }
 
-    await createViewerAccess({ userId: user.id, reason });
+    await createViewerAccess({ userId: user.id, reason, provinceId, cityId });
 
     return res.code(201).send({
         message: `Access requested for ${user.username}.`,

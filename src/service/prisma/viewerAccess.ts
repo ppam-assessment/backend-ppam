@@ -8,6 +8,8 @@ export const readAllViewerAccess = async () => {
             reason: true,
             rejectReason: true,
             date: true,
+            province: true,
+            city: true,
             viewer: {
                 select: {
                     username: true
@@ -19,28 +21,38 @@ export const readAllViewerAccess = async () => {
     return access;
 }
 
-export const readViewerAccessByUserId = async ({userId}: {userId: string}) => {
-    const access = await prisma.viewerAccess.findFirst({
+export const readViewerAccessByUserId = async ({userId, provinceId, cityId}: {userId: string, provinceId?: number | null, cityId?: number | null}) => {
+    let whereIsNullClause = {}
+    if(provinceId === null) whereIsNullClause = {
+
+    }
+    const access = await prisma.viewerAccess.findMany({
         where: {
-            userId
+            userId,
+            provinceId,
+            cityId
         },
         select: {
             id: true,
             status: true,
             reason:true,
             date: true,
-            rejectReason: true
+            rejectReason: true,
+            provinceId: true,
+            cityId: true
         }
     })
 
     return access;
 }
 
-export const createViewerAccess = async ({userId, reason}: {userId: string, reason: string | undefined}) => {
+export const createViewerAccess = async ({userId, reason, provinceId, cityId}: {userId: string, reason?: string, provinceId?: number, cityId?: number}) => {
     const access = await prisma.viewerAccess.create({
         data: {
             userId,
-            reason
+            reason,
+            provinceId,
+            cityId
         }
     })
 

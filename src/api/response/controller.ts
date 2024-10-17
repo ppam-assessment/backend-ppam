@@ -96,6 +96,7 @@ export const getUserResponsesController = async (req: FastifyRequest, res: Fasti
 
 export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
+  let accessCityIds: (number | null)[] | undefined = undefined, accessProvinceIds: (number | null)[] | undefined = undefined
 
   const { user } = await getSessionUser({ id: session.id }).catch(() => {
     throw new NotFound("User not found.")
@@ -103,12 +104,20 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
 
   if (user.status === Status.viewer) {
     const access = await readViewerAccessByUserId({ userId: user.id })
-    if (access?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
+    if (access.length === 0) throw new Forbidden("User doesn't have access.")
+
+    accessCityIds = access.map( record => {
+      return record.cityId
+    })
+    accessProvinceIds = access.map( record => {
+      return record.provinceId
+    })
   } else if (user.status === Status.submitter) {
     throw new Forbidden("User doesn't have access.");
   }
 
-  const responses = await readAllResponseMetadata()
+  const responseMetadataArg = { cityIds: accessCityIds?.filter((id): id is number => id !== null) , provinceIds: accessProvinceIds?.filter((id): id is number => id !== null) }
+  const responses = await readAllResponseMetadata(responseMetadataArg)
   const mappedResponses = responses.map(response => {
     const { province, city } = response;
 
@@ -139,7 +148,7 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
 
   if (user.status === Status.viewer) {
     const access = await readViewerAccessByUserId({ userId: user.id })
-    if (access?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
+    // if (access[0]?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
   } else if (user.status === Status.submitter) {
     throw new Forbidden("User doesn't have access.");
   }

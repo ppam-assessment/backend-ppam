@@ -14,11 +14,15 @@ async function main() {
   //   data: topics
   // })
 
-  for (const instrument of instruments) {
-    await prisma.instrument.create({
-      data: instrument,
-    })
-  }
+  // for (const instrument of instruments) {
+  //   await prisma.instrument.create({
+  //     data: instrument,
+  //   })
+  // }
+
+  await prisma.cities.createMany({
+    data: citiesData
+  })
 
   // await prisma.provinces.createMany({
   //   data: areas

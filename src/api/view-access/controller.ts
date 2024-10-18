@@ -107,7 +107,7 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
     })
 
     const { username } = req.params as { username: string }
-    const { status, reason, rejectReason } = req.body
+    const { status, reason, rejectReason, cityId, provinceId } = req.body
 
     if (user.status !== Status.admin && (status === actionAccess.approve || status === actionAccess.reject)) throw new UnprocessableEntity('Undefined action')
 
@@ -121,7 +121,7 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
 
     const isViewer = user.status === Status.viewer;
     
-    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason })
+    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason,  })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${viewer.username}`

@@ -47,7 +47,7 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
                     date: record?.date,
                     area
                 }
-            })      
+            })
             break;
         default:
             throw new Forbidden("User doesn't have access.");

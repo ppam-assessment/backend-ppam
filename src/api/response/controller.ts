@@ -146,9 +146,11 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   })
   const { username } = req.params as { username: string }
 
+  const metadata = await readResponseMetadataByUsername({username: username})
+
   if (user.status === Status.viewer) {
-    const access = await readViewerAccessByUserId({ userId: user.id })
-    // if (access[0]?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
+    const access = await readViewerAccessByUserId({ userId: user.id, cityId: metadata?.city?.id, provinceId: metadata?.province?.id })
+    if (access[0]?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
   } else if (user.status === Status.submitter) {
     throw new Forbidden("User doesn't have access.");
   }
@@ -159,7 +161,6 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const mappedResponses = mapResponses(response);
   const grouppedResponses = groupResponsesByTopic(mappedResponses)
 
-  const metadata = await readResponseMetadataByUsername({username: username})
   const mappedMetadata = {
       leader: metadata?.leader,
       date: metadata?.date,

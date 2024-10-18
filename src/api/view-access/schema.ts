@@ -12,8 +12,8 @@ export const putViewerAccessSchema = z.object({
     status: z.nativeEnum(actionAccess),
     reason: z.string().optional(),
     rejectReason: z.string().optional(),
-    // provinceId: z.number().optional(),
-    // cityId: z.number().optional()
+    provinceId: z.number().optional(),
+    cityId: z.number().optional()
 })
 
 export type PutViewerAccessSchema = z.infer<typeof putViewerAccessSchema>

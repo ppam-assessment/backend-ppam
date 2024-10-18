@@ -22,10 +22,6 @@ export const readAllViewerAccess = async () => {
 }
 
 export const readViewerAccessByUserId = async ({userId, provinceId, cityId}: {userId: string, provinceId?: number | null, cityId?: number | null}) => {
-    let whereIsNullClause = {}
-    if(provinceId === null) whereIsNullClause = {
-
-    }
     const access = await prisma.viewerAccess.findMany({
         where: {
             userId,

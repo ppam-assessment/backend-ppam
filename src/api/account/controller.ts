@@ -12,29 +12,34 @@ import { Forbidden } from "../../exceptions/Forbidden.js";
 import { BadRequest } from "../../exceptions/BadRequest.js";
 
 export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchema }>, res: FastifyReply) => {
-  loginUserSchema.safeParse(req.body)
-  const { email, username, password } = req.body
-  const exp = await getNextDay()
-  const sessionId = uuidv4();
+  const { identifier, email, username, password } = req.body;
 
-  const user = email ?
-    await getUserByEmail({ email })
-    : username ?
-      await getUserByName({ username })
-      : undefined
+  const user = identifier
+    ? (identifier.includes('@') 
+        ? await getUserByEmail({ email: identifier }) 
+        : await getUserByName({ username: identifier }))
+    : (email
+        ? await getUserByEmail({ email }) 
+        : username
+          ? await getUserByName({ username })
+          : undefined);
 
-      if(!user) throw new BadRequest("Invalid email or username.")
+  if (!user) throw new BadRequest("Invalid email or username.");
+  
   const isMatch = user && bcrypt.compareSync(password, user.password);
-  if (!isMatch) throw new BadRequest("Invalid password.")
+  if (!isMatch) throw new BadRequest("Invalid password.");
+
+  const exp = await getNextDay();
+  const sessionId = uuidv4();
 
   const token = req.jwt.sign({
     id: sessionId,
     username: user.username,
     institute: user?.institute || undefined,
     status: user.status,
-  })
+  });
 
-  await addSession({ id: sessionId, userId: user.id, token, exp })
+  await addSession({ id: sessionId, userId: user.id, token, exp });
 
   return res.code(200).send({
     message: 'Login success.',
@@ -46,8 +51,9 @@ export const loginController = async (req: FastifyRequest<{ Body: LoginUserSchem
     httpOnly: true,
     secure: false,
     expires: exp
-  })
-}
+  });
+};
+
 
 export const createUserController = async (req: FastifyRequest<{ Body: CreateUserSchema }>, res: FastifyReply) => {
   createUserSchema.safeParse(req.body)

@@ -13,6 +13,7 @@ export const createUserSchema = z.object({
 export const loginUserSchema = z.object({
     email: z.string().nullable().optional(),
     username: z.string().nullable().optional(),
+    identifier: z.string().nullable().optional(),
     password: z.string().min(6, "Password minimal 6 karakter.")
 }).refine(field => field.email || field.username, {
     message: "Either username or email must be filled.",

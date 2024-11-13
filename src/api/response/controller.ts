@@ -145,20 +145,21 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
     throw new NotFound("User not found.")
   })
   const { username } = req.params as { username: string }
+  const { xls } = req.query as { xls?: string}
 
   const metadata = await readResponseMetadataByUsername({username: username})
 
   if (user.status === Status.viewer) {
     const access = await readViewerAccessByUserId({ userId: user.id, cityId: metadata?.city?.id, provinceId: metadata?.province?.id })
     if (access[0]?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
-  } else if (user.status === Status.submitter) {
+  } else if (user.status === Status.submitter && user.username !== username) {
     throw new Forbidden("User doesn't have access.");
   }
 
   const submitter = await readUserByUsername({ username }).catch(() => { throw new NotFound(`Submitter ${username} not found.`) })
 
   const response = await readUserResponses({ userId: submitter.id });
-  const mappedResponses = mapResponses(response);
+  const mappedResponses = mapResponses(response, xls);
   const grouppedResponses = groupResponsesByTopic(mappedResponses)
 
   const mappedMetadata = {

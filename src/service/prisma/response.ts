@@ -56,6 +56,12 @@ export const readUserResponses = async ({ userId, topicId }: { userId?: string, 
                     }
                 }
             },
+            topic: {
+                select: {
+                    topic: true,
+                    part: true
+                }
+            }
         },
         orderBy: {
             number: 'asc'

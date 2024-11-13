@@ -19,6 +19,10 @@ interface Response {
             comment: string | null;
         }[];
     }[];
+    topic: {
+        topic: string,
+        part: number
+    }
 }
 
 interface MappedResponse {
@@ -38,9 +42,12 @@ interface SubMappedResponse {
     comment?: string | null;
 }
 
-// Fungsi untuk melakukan mapping
-const mapResponses = (responses: Response[]): MappedResponse[] => {
-    return responses.map(item => {
+const mapResponses = (responses: Response[], xls?: string) => {
+
+    const nonXlsMap = responses.map(item => {
+
+        if(xls === 'true') return undefined
+
         return {
             id: item.id,
             number: item.number,
@@ -58,6 +65,25 @@ const mapResponses = (responses: Response[]): MappedResponse[] => {
             }) : undefined
         };
     });
+
+    const xlsMap = responses.map(item => {
+
+        if(xls !== 'true') return undefined
+
+        return {
+            question: item.question,
+            answer: item.respons,
+            comment: item.respons[0].comment,
+            title: item.topic.topic,
+            topicId: item.topicId,
+            topicTitle: item.topic.part,
+            id: item.id,
+        }
+    });
+
+    const mappedResponses = xls === 'true' ? xlsMap : nonXlsMap
+
+    return mappedResponses;
 };
 
 export default mapResponses;

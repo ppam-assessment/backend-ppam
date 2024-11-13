@@ -31,21 +31,16 @@ interface SubResponse {
     comment?: string | null;
 }
 
-// Define the grouped responses structure
 interface GroupedResponses {
     [key: string]: Response[];
 }
 
-// Function to group responses by topic
 const groupResponsesByTopic = (responses: Response[] | undefined): GroupedResponses => {
     const groupedResponses: GroupedResponses = {};
 
-    // Iterate over the keys in the groupByTopic object
     for (const [groupKey, topicIds] of Object.entries(groupByTopic)) {
-        // Filter responses by topicId present in each group
         const groupItems = responses?.filter(item => topicIds.includes(item.topicId));
 
-        // Save the filtered results into the groupedResponses object by groupKey
         if (groupItems && groupItems.length > 0) {
             groupedResponses[groupKey] = groupItems;
         }

@@ -25,15 +25,15 @@ interface Response {
     }
 }
 
-interface MappedResponse {
-    id: number;
-    number: number | null;
-    topicId: number;
-    question: string;
-    value?: string;
-    comment?: string | null;
-    sub?: SubMappedResponse[];
-}
+// interface MappedResponse {
+//     id: number;
+//     number: number | null;
+//     topicId: number;
+//     question: string;
+//     value?: string;
+//     comment?: string | null;
+//     sub?: SubMappedResponse[];
+// }
 
 interface SubMappedResponse {
     id: number;
@@ -42,12 +42,9 @@ interface SubMappedResponse {
     comment?: string | null;
 }
 
-const mapResponses = (responses: Response[], xls?: string) => {
+export const mapResponses = (responses: Response[]) => {
 
-    const nonXlsMap = responses.map(item => {
-
-        if(xls === 'true') return undefined
-
+    return responses.map(item => {
         return {
             id: item.id,
             number: item.number,
@@ -65,11 +62,10 @@ const mapResponses = (responses: Response[], xls?: string) => {
             }) : undefined
         };
     });
+};
 
-    const xlsMap = responses.map(item => {
-
-        if(xls !== 'true') return undefined
-
+export const mapXlsResponses = (response: Response[]) => {
+    return response.map(item => {
         return {
             question: item.question,
             answer: item.respons,
@@ -81,9 +77,4 @@ const mapResponses = (responses: Response[], xls?: string) => {
         }
     });
 
-    const mappedResponses = xls === 'true' ? xlsMap : nonXlsMap
-
-    return mappedResponses;
-};
-
-export default mapResponses;
+}

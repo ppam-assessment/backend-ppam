@@ -9,7 +9,7 @@ import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
 import groupResponsesByTopic from "../../utils/lib/groupResponsesByTopic.js";
-import mapResponses from "../../utils/lib/mapResponses.js";
+import { mapResponses, mapXlsResponses } from "../../utils/lib/mapResponses.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -146,7 +146,9 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   })
   const { username } = req.params as { username: string }
   const { xls } = req.query as { xls?: string}
+  const isXls = xls === 'true'
 
+  let mappedResponses, grouppedResponses
   const metadata = await readResponseMetadataByUsername({username: username})
 
   if (user.status === Status.viewer) {
@@ -159,8 +161,14 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const submitter = await readUserByUsername({ username }).catch(() => { throw new NotFound(`Submitter ${username} not found.`) })
 
   const response = await readUserResponses({ userId: submitter.id });
-  const mappedResponses = mapResponses(response, xls);
-  const grouppedResponses = groupResponsesByTopic(mappedResponses)
+
+  if(xls){
+ mappedResponses = mapXlsResponses(response)
+  } else {
+      mappedResponses = mapResponses(response);
+  grouppedResponses = groupResponsesByTopic(mappedResponses)
+
+  }
 
   const mappedMetadata = {
       leader: metadata?.leader,

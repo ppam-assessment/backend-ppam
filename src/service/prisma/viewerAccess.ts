@@ -46,7 +46,7 @@ export const readViewerAccessByUserId = async ({userId, provinceId, cityId}: {us
     return access;
 }
 
-export const createViewerAccess = async ({userId, reason, provinceId, cityId}: {userId: string, reason?: string, provinceId?: number, cityId?: number}) => {
+export const createViewerAccess = async ({userId, reason, provinceId, cityId}: {userId: string, reason?: string, provinceId?: number | null, cityId?: number | null}) => {
     const access = await prisma.viewerAccess.create({
         data: {
             userId,

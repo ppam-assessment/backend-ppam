@@ -127,6 +127,10 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
       leader: response.leader,
       date: response.date,
       area,
+      areaId:{
+        cityId: response?.city?.id,
+        provinceId: response?.province?.id
+      },
       participants: response.participants
     }
   })
@@ -174,10 +178,6 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
       leader: metadata?.leader,
       date: metadata?.date,
       area: !metadata?.province ? `Nasional` : `Subnasional, ${metadata?.province?.name}, ${metadata?.city?.name || ''}`,
-      areaId:{
-        cityId: metadata?.city?.id,
-        provinceId: metadata?.province?.id
-      },
       participants: metadata?.participants
     }
 

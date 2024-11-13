@@ -31,7 +31,9 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
                     reason: record.reason,
                     rejectReason: record.rejectReason,
                     status: record.status,
-                    area
+                    area,
+                    cityId: record?.cityId,
+                    provinceId: record?.provinceId
                 }
             })
             break;
@@ -45,7 +47,9 @@ export const getViewerAccessController = async (req: FastifyRequest, res: Fastif
                     reason: record?.reason || '-',
                     rejectsReaseon: record?.rejectReason || '-',
                     date: record?.date,
-                    area
+                    area,
+                    cityId: record?.cityId,
+                    provinceId: record?.provinceId
                 }
             })
             break;
@@ -121,7 +125,7 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
 
     const isViewer = user.status === Status.viewer;
     
-    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason,  })
+    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason, cityId, provinceId })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${viewer.username}`

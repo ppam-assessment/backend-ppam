@@ -162,11 +162,11 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
 
   const response = await readUserResponses({ userId: submitter.id });
 
-  if(xls){
- mappedResponses = mapXlsResponses(response)
+  if (isXls) {
+    mappedResponses = mapXlsResponses(response)
   } else {
-      mappedResponses = mapResponses(response);
-  grouppedResponses = groupResponsesByTopic(mappedResponses)
+    mappedResponses = mapResponses(response);
+    grouppedResponses = groupResponsesByTopic(mappedResponses)
 
   }
 

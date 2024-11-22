@@ -49,7 +49,7 @@ model Users {
   session Sessions[]
   response Responses[]
   metadata ResponseMetadata?
-  viewerAccess ViewerAccess?
+  viewerAccess ViewerAccess[]
   submitterAccess SubmitterAccess?
 }
 
@@ -132,10 +132,11 @@ model Sessions {
 
   user Users @relation(fields: [userId], references: [id])
 }
+// TODO Ubah skema penyimpanan city dan province
 
 model ViewerAccess {
   id Int @id @default(autoincrement())
-  userId String @unique
+  userId String
   status accessStatus @default(pending)
   reason String?
   rejectReason String?

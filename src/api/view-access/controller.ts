@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getSessionUser } from "../../service/prisma/session.js";
-import { accessStatus, Status } from "@prisma/client";
-import { createViewerAccess, readAllViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
+import { accessStatus, Prisma, Status } from "@prisma/client";
+import { createViewerAccess, readAllViewerAccess, readViewerAccess, readViewerAccessByUserId, updateViewerAccess } from "../../service/prisma/viewerAccess.js";
 import { PostViewerAccessSchema, PutViewerAccessSchema } from "./schema.js";
 import { actionAccess } from "../../utils/enum/actionAccess.js";
 import { NotFound } from "../../exceptions/NotFound.js";
@@ -71,7 +71,9 @@ export const postViewerAccessController = async (req: FastifyRequest<{Body: Post
 
     const {reason, provinceId, cityId} = req.body
 
-    // const access = await readViewerAccessByUserId({userId: user.id})
+    await readViewerAccess({userId: user.id, provinceId, cityId}).catch( e => {
+        if(e.code !== "P2025") throw e
+    })
 
     if (user.status !== Status.viewer) {
         throw new Forbidden("User doesn't have access.");
@@ -91,13 +93,14 @@ export const putResubmitAccessController = async (req: FastifyRequest<{ Body: Pu
     })
     const isViewer = user.status === Status.viewer;
 
-    const { status, reason } = req.body
+    const { status, reason, provinceId, cityId } = req.body
 
     if( !isViewer || status === actionAccess.approve || status === actionAccess.reject ) throw new NotFound("User doesn't have access."); 
 
     const updatedStatus = accessStatus.pending
 
-    await updateViewerAccess({userId: user.id , status: updatedStatus, reason: isViewer ? reason : undefined })
+    const viewAccess = await readViewerAccess({userId: user.id, provinceId, cityId})
+    await updateViewerAccess({id: viewAccess.id, status: updatedStatus, reason: isViewer ? reason : undefined })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${user.username}`,
@@ -124,8 +127,9 @@ export const putViewerAccessController = async (req: FastifyRequest<{ Body: PutV
         const viewer = await readUserByUsername({ username})
 
     const isViewer = user.status === Status.viewer;
-    
-    await updateViewerAccess({userId: viewer.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason, cityId, provinceId })
+    const viewAccess = await readViewerAccess({userId: viewer.id, provinceId, cityId})
+
+    await updateViewerAccess({id: viewAccess.id , status: updatedStatus, reason: isViewer ? reason : undefined, rejectReason, cityId, provinceId })
 
     res.code(200).send({
         message: `Access status updated to ${status} for ${viewer.username}`

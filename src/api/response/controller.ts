@@ -3,7 +3,7 @@ import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from ".
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Prisma, Status } from "@prisma/client";
 import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
-import { readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
+import { readViewerAccess, readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
 import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
@@ -128,8 +128,8 @@ export const getResponseMetadata = async (req: FastifyRequest, res: FastifyReply
       date: response.date,
       area,
       areaId:{
-        cityId: response?.city?.id,
-        provinceId: response?.province?.id
+        cityId: response?.city?.id || null,
+        provinceId: response?.province?.id || null
       },
       participants: response.participants
     }
@@ -156,8 +156,8 @@ export const getUserResponseByUsername = async (req: FastifyRequest, res: Fastif
   const metadata = await readResponseMetadataByUsername({username: username})
 
   if (user.status === Status.viewer) {
-    const access = await readViewerAccessByUserId({ userId: user.id, cityId: metadata?.city?.id, provinceId: metadata?.province?.id })
-    if (access[0]?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
+    const access = await readViewerAccess({ userId: user.id, cityId: metadata?.city?.id, provinceId: metadata?.province?.id })
+    if (access?.status !== accessStatus.approved) throw new Forbidden("User doesn't have access.")
   } else if (user.status === Status.submitter && user.username !== username) {
     throw new Forbidden("User doesn't have access.");
   }

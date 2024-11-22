@@ -71,9 +71,11 @@ export const postViewerAccessController = async (req: FastifyRequest<{Body: Post
 
     const {reason, provinceId, cityId} = req.body
 
-    await readViewerAccess({userId: user.id, provinceId, cityId}).catch( e => {
+    const access = await readViewerAccess({userId: user.id, provinceId, cityId}).catch( e => {
         if(e.code !== "P2025") throw e
     })
+
+    if(access?.id) throw new Conflict(`View access cannot duplicate for ${user.username} on province ${access.province?.name} and city ${access.city?.name}.`) 
 
     if (user.status !== Status.viewer) {
         throw new Forbidden("User doesn't have access.");

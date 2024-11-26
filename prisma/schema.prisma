@@ -132,7 +132,6 @@ model Sessions {
 
   user Users @relation(fields: [userId], references: [id])
 }
-// TODO Ubah skema penyimpanan city dan province
 
 model ViewerAccess {
   id Int @id @default(autoincrement())

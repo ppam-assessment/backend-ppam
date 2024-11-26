@@ -85,3 +85,20 @@ export const updateInstrumentQuestion = async ({ id, question }: { id: number, q
 
     return 1;
 }
+
+export const readInstrumentsCountByTopicPart = async () => {
+    const instruments = await prisma.instrument.groupBy({
+      by: ["topicId"],
+      where: {
+        type: {
+          in: ["dropdown", "dropdownya", "dropdownideal", "dropdownarea"],
+        },
+      },
+      _count: {
+        _all: true, // Menghitung jumlah instrumen
+      },
+    });
+  
+    return instruments;
+  };
+  

@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Prisma, Status } from "@prisma/client";
-import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
+import { addUserResponses, deleteUserResponsesByInstrumentId, readResponsesScoreData, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccess, readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
 import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
@@ -10,6 +10,8 @@ import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
 import groupResponsesByTopic from "../../utils/lib/groupResponsesByTopic.js";
 import { mapResponses, mapXlsResponses } from "../../utils/lib/mapResponses.js";
+import { readInstrumentsCountByTopicPart } from "../../service/prisma/instrument.js";
+import { mapProvinceScores } from "../../utils/lib/mapProvinceScores.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -220,3 +222,29 @@ export const postSubmitterMetadata = async (req: FastifyRequest<{ Body: InputMet
     message: `Response metadata created for ${user.username}.`,
   })
 }
+
+export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) => {
+  try {
+    const session = await req.jwtVerify() as TokenPayload
+    const { user } = await getSessionUser({ id: session.id }).catch(() => {
+      throw new NotFound("User not found.")
+    })
+  
+    const provinceScores = await readResponsesScoreData();
+
+    const instrumentCounts = await readInstrumentsCountByTopicPart();
+
+    const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
+
+    return res.code(200).send({
+      message: "Province scores successfully retrieved and mapped.",
+      data: mappedScores,
+    });
+  } catch (error) {
+
+    return res.code(500).send({
+      message: "Failed to retrieve province scores.",
+      error,
+    });
+  }
+};

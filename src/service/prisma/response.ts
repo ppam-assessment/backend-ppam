@@ -82,3 +82,79 @@ export const deleteUserResponsesByInstrumentId = async({userId, instrumentId}: {
 
     return result;
 }
+
+// export const readProvinceOnlyResponse = async () => {
+//     const result = await prisma.users.findMany({
+//         where: {
+//             metadata: {
+//                 cityId: null,
+//                 NOT: {
+//                     provinceId: null
+//                 }
+//             },
+//             response: {
+                
+//             }
+//         },
+//         select: {
+//             response: {
+                
+//             }
+//         }
+//     })
+// }
+
+export const readResponsesScoreData = async () => {
+    const responses = await prisma.responses.findMany({
+      where: {
+        responder: {
+          metadata: {
+            provinceId: {
+              not: null,
+            },
+            cityId: null,
+          },
+        },
+        instrument: {
+          type: {
+            in: ["dropdown", "dropdownya", "dropdownideal", "dropdownarea"],
+          },
+        },
+        value: {
+          in: ["Ya", "Tidak", "Tidak Tahu", "Ideal", "Minimal Diperlukan", "Tidak Memadai"],
+        },
+      },
+      select: {
+        value: true,
+        instrumentId: true, // Dibutuhkan untuk menghitung jumlah instrumen unik
+        responder: {
+          select: {
+            metadata: {
+              select: {
+                province: {
+                  select: {
+                    id: true,
+                    name: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        instrument: {
+          select: {
+            topic: {
+              select: {
+                topic: true,
+                part: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  
+    return responses;
+  };
+  
+  

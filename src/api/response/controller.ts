@@ -238,7 +238,7 @@ export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) =
 
     return res.code(200).send({
       message: "Province scores successfully retrieved and mapped.",
-      data: mappedScores,
+      data: { provinceScores, instrumentCounts, mappedScores },
     });
   } catch (error) {
 

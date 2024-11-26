@@ -1,3 +1,4 @@
+import { InstrumentType } from "@prisma/client";
 import prisma from "../../config/prisma.js";
 
 export const addUserResponses = async ({ data }: {
@@ -117,12 +118,9 @@ export const readResponsesScoreData = async () => {
         },
         instrument: {
           type: {
-            in: ["dropdown", "dropdownya", "dropdownideal", "dropdownarea"],
+            in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],
           },
-        },
-        value: {
-          in: ["Ya", "Tidak", "Tidak Tahu", "Ideal", "Minimal Diperlukan", "Tidak Memadai"],
-        },
+        }
       },
       select: {
         value: true,

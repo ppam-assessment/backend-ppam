@@ -122,36 +122,36 @@ export const readResponsesScoreData = async () => {
     //     //   },
     //     // }
     //   },
-      select: {
-        value: true,
-        instrumentId: true, // Dibutuhkan untuk menghitung jumlah instrumen unik
-        responder: {
-          select: {
-            username: true,
-            // metadata: {
-            //   select: {
-            //     province: {
-            //       select: {
-            //         id: true,
-            //         name: true,
-            //       },
-            //     },
-            //   },
-            // },
-          },
-        },
-        // instrument: {
-        //   select: {
-        //     topic: {
-        //       select: {
-        //         topic: true,
-        //         part: true,
-        //       },
-        //     },
-        //   },
-        // },
-      },
-    });
+    //   select: {
+    //     value: true,
+    //     instrumentId: true, // Dibutuhkan untuk menghitung jumlah instrumen unik
+    //     responder: {
+    //       select: {
+    //         username: true,
+    //         // metadata: {
+    //         //   select: {
+    //         //     province: {
+    //         //       select: {
+    //         //         id: true,
+    //         //         name: true,
+    //         //       },
+    //         //     },
+    //         //   },
+    //         // },
+    //       },
+    //     },
+    //     // instrument: {
+    //     //   select: {
+    //     //     topic: {
+    //     //       select: {
+    //     //         topic: true,
+    //     //         part: true,
+    //     //       },
+    //     //     },
+    //     //   },
+    //     // },
+    //   },
+    // });
   
     return responses;
   };

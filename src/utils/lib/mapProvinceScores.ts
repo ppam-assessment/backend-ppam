@@ -101,3 +101,5 @@ const mapProvinceScores = (
   // Gabungkan hasil untuk topik 1-4 dan topik lainnya
   return [result14, ...otherResults];
 };
+
+export default mapProvinceScores

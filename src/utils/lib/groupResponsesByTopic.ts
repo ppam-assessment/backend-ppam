@@ -1,5 +1,4 @@
-// Define type for the groupByTopic object
-const groupByTopic: { [key: string]: number[] } = {
+export const groupByTopic: { [key: string]: number[] } = {
     "0": [0],
     "1": [1, 2, 3, 4],
     "2": [5],
@@ -13,7 +12,6 @@ const groupByTopic: { [key: string]: number[] } = {
     "10": [13]
 };
 
-// Define the response structure
 interface Response {
     id: number;
     topicId: number;
@@ -35,7 +33,7 @@ interface GroupedResponses {
     [key: string]: Response[];
 }
 
-const groupResponsesByTopic = (responses: Response[] | undefined): GroupedResponses => {
+export const groupResponsesByTopic = (responses: Response[] | undefined): GroupedResponses => {
     const groupedResponses: GroupedResponses = {};
 
     for (const [groupKey, topicIds] of Object.entries(groupByTopic)) {
@@ -48,5 +46,3 @@ const groupResponsesByTopic = (responses: Response[] | undefined): GroupedRespon
 
     return groupedResponses;
 };
-
-export default groupResponsesByTopic;

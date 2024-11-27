@@ -8,7 +8,7 @@ import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataBy
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
-import groupResponsesByTopic from "../../utils/lib/groupResponsesByTopic.js";
+import {groupResponsesByTopic} from "../../utils/lib/groupResponsesByTopic.js";
 import { mapResponses, mapXlsResponses } from "../../utils/lib/mapResponses.js";
 import { readInstrumentsCountByTopicPart } from "../../service/prisma/instrument.js";
 import { mapProvinceScores } from "../../utils/lib/mapProvinceScores.js";
@@ -234,14 +234,14 @@ export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) =
 
     const instrumentCounts = await readInstrumentsCountByTopicPart();
 
-    // const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
+    const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
 
     return res.code(200).send({
       message: "Province scores successfully retrieved and mapped.",
       data: { 
         provinceScores, 
         instrumentCounts, 
-        // mappedScores 
+        mappedScores 
       },
     });
   } catch (error) {

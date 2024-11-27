@@ -11,7 +11,7 @@ import { readUserByUsername } from "../../service/prisma/user.js";
 import {groupResponsesByTopic} from "../../utils/lib/groupResponsesByTopic.js";
 import { mapResponses, mapXlsResponses } from "../../utils/lib/mapResponses.js";
 import { readInstrumentsCountByTopicPart } from "../../service/prisma/instrument.js";
-import { mapProvinceScores } from "../../utils/lib/mapProvinceScores.js";
+import mapProvinceScores from "../../utils/lib/mapProvinceScores.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -234,7 +234,7 @@ export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) =
 
     const instrumentCounts = await readInstrumentsCountByTopicPart();
 
-    const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
+    const mappedScores = mapProvinceScores(provinceScores);
 
     return res.code(200).send({
       message: "Province scores successfully retrieved and mapped.",

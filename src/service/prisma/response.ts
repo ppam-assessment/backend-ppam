@@ -154,7 +154,7 @@ export const readResponsesScoreData = async () => {
             topic: {
               select: {
                 topic: true,
-                part: true,
+                id: true,
               },
             },
           },

@@ -116,6 +116,16 @@ export const readResponsesScoreData = async () => {
             cityId: null,
           },
         },
+        value: {
+            in: [
+                'Ya',
+                'Tidak',
+                'Tidak Tahu',
+                'Ideal',
+                'Minimal Diperlukan',
+                'Tidak Memadai'
+            ]
+        }
         // instrument: {
         //   type: {
         //     in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],

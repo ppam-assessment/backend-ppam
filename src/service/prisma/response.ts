@@ -151,7 +151,7 @@ export const readResponsesScoreData = async () => {
     //     //   },
     //     // },
     //   },
-    // });
+    });
   
     return responses;
   };

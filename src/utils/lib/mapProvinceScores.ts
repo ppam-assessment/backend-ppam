@@ -57,7 +57,7 @@ const mapProvinceScores = (
 
   // Format data untuk topik 1-4
   const result14 = {
-      asesmen: "KESIAPAN KESELURUHAN TINGKAT NASIONAL: KEBIJAKAN, KOORDINASI DAN SUMBER DAYA",
+      asesmen: "Kesiapan Keseluruhan Tingkat Nasional: Kebijakan, Koordinasi dan Sumber Daya",
       provinsi: Object.entries(provinceMap14).map(([name, score]) => ({
           nama: name,
           skor: Math.round((score / maxScore14) * 100), // Persentase

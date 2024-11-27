@@ -116,11 +116,11 @@ export const readResponsesScoreData = async () => {
             cityId: null,
           },
         },
-        instrument: {
-          type: {
-            in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],
-          },
-        }
+        // instrument: {
+        //   type: {
+        //     in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],
+        //   },
+        // }
       },
       select: {
         value: true,

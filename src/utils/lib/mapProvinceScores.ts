@@ -90,7 +90,7 @@ const mapProvinceScores = (
 
       // Format data untuk topik tertentu
       return {
-          asesmen: topicScores[0]?.instrument.topic.topic || "Unknown Topic",
+          asesmen: topicScores[0]?.instrument.topic.topic || "Belum Terisi",
           provinsi: Object.entries(provinceMap).map(([name, score]) => ({
               nama: name,
               skor: Math.round((score / maxScore) * 100), // Persentase

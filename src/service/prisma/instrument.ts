@@ -93,11 +93,25 @@ export const readInstrumentsCountByTopicPart = async () => {
         type: {
           in: ["dropdown", "dropdownya", "dropdownideal", "dropdownarea"],
         },
+        topicId: {
+            not: 0
+        }
       },
       _count: {
         _all: true, // Menghitung jumlah instrumen
       },
     });
+
+    await prisma.topics.findMany({
+        select: {
+            part: true,
+            _count: {
+                select: {
+                    instrument: true
+                }
+            }
+        }
+    })
   
     return instruments;
   };

@@ -100,6 +100,9 @@ export const readInstrumentsCountByTopicPart = async () => {
       _count: {
         _all: true,
       },
+      orderBy: {
+        topicId: 'asc'
+      }
     });
 
   

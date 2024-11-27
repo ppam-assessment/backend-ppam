@@ -117,8 +117,6 @@ model Responses {
   value String
   score Int
   comment String?
-  provinceId Int?
-  cityId Int?
 
   instrument Instrument @relation(fields: [instrumentId], references: [id])
   responder Users @relation(fields: [userId],references: [id])

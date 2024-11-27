@@ -234,7 +234,7 @@ export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) =
 
     const instrumentCounts = await readInstrumentsCountByTopicPart();
 
-    const mappedScores = mapProvinceScores(provinceScores);
+    const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
 
     return res.code(200).send({
       message: "Province scores successfully retrieved and mapped.",

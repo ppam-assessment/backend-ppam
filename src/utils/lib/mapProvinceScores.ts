@@ -32,14 +32,47 @@ const mapProvinceScores = (
       };
   })[]
 ) => {
-  return instrumentCounts.map(({ topicId, _count }) => {
-      // Ambil data terkait topik dari provinceScores
+  // Pisahkan topik 1-4 dan topik lainnya
+  const topics14 = instrumentCounts.filter(({ topicId }) => topicId >= 1 && topicId <= 4);
+  const otherTopics = instrumentCounts.filter(({ topicId }) => topicId > 4);
+
+  // Hitung total skor maksimum untuk topik 1-4
+  const maxScore14 = topics14.reduce((total, { _count }) => total + _count._all * 3, 0);
+
+  // Kelompokkan skor per provinsi untuk topik 1-4
+  const provinceMap14: { [key: string]: number } = {};
+
+  provinceScores
+      .filter(score => topics14.some(topic => topic.topicId === score.instrument.topic.id))
+      .forEach(({ responder, value }) => {
+          if (responder?.metadata?.province) {
+              const { name } = responder.metadata.province;
+              const score = getScore(value);
+              if (!provinceMap14[name]) {
+                  provinceMap14[name] = 0;
+              }
+              provinceMap14[name] += score; // Akumulasi skor
+          }
+      });
+
+  // Format data untuk topik 1-4
+  const result14 = {
+      asesmen: "KESIAPAN KESELURUHAN TINGKAT NASIONAL: KEBIJAKAN, KOORDINASI DAN SUMBER DAYA",
+      provinsi: Object.entries(provinceMap14).map(([name, score]) => ({
+          nama: name,
+          skor: Math.round((score / maxScore14) * 100), // Persentase
+      })),
+  };
+
+  // Proses topik lainnya secara individual
+  const otherResults = otherTopics.map(({ topicId, _count }) => {
+      // Data terkait topik tertentu
       const topicScores = provinceScores.filter(
           score => score.instrument.topic.id === topicId
       );
 
-      // Total skor maksimum untuk topik
-      const maxScore = _count._all * 3; // Jumlah instrumen dikali skor maksimal (3)
+      // Skor maksimum untuk topik tertentu
+      const maxScore = _count._all * 3;
 
       // Kelompokkan skor per provinsi
       const provinceMap: { [key: string]: number } = {};
@@ -55,17 +88,16 @@ const mapProvinceScores = (
           }
       });
 
-      // Hitung skor sebagai persentase dan format data provinsi
-      const provinsi = Object.entries(provinceMap).map(([name, score]) => ({
-          nama: name,
-          skor: Math.round((score / maxScore) * 100), // Persentase
-      }));
-
+      // Format data untuk topik tertentu
       return {
-          asesmen: topicScores[0]?.instrument.topic.topic || 'Unknown Topic', // Nama topik
-          provinsi,
+          asesmen: topicScores[0]?.instrument.topic.topic || "Unknown Topic",
+          provinsi: Object.entries(provinceMap).map(([name, score]) => ({
+              nama: name,
+              skor: Math.round((score / maxScore) * 100), // Persentase
+          })),
       };
   });
-};
 
-export default mapProvinceScores
+  // Gabungkan hasil untuk topik 1-4 dan topik lainnya
+  return [result14, ...otherResults];
+};

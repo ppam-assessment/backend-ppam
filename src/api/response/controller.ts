@@ -2,16 +2,16 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { InputMetadataSchema, inputResponseSchema, InputResponseSchema } from "./schema.js";
 import { getSessionUser } from "../../service/prisma/session.js";
 import { accessStatus, Prisma, Status } from "@prisma/client";
-import { addUserResponses, deleteUserResponsesByInstrumentId, readResponsesScoreData, readUserResponses } from "../../service/prisma/response.js";
+import { addUserResponses, deleteUserResponsesByInstrumentId, readUserResponses } from "../../service/prisma/response.js";
 import { readViewerAccess, readViewerAccessByUserId } from "../../service/prisma/viewerAccess.js";
-import { createResponseMetadata, readAllResponseMetadata, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
+import { createResponseMetadata, readAllResponseMetadata, readMetadataScoreValue, readResponseMetadataByUserId, readResponseMetadataByUsername, updateResponseMetadata } from "../../service/prisma/responseMetadata.js";
 import { NotFound } from "../../exceptions/NotFound.js";
 import { Forbidden } from "../../exceptions/Forbidden.js";
 import { readUserByUsername } from "../../service/prisma/user.js";
-import {groupResponsesByTopic} from "../../utils/lib/groupResponsesByTopic.js";
-import { mapResponses, mapXlsResponses } from "../../utils/lib/mapResponses.js";
-import { readInstrumentsCountByTopicPart } from "../../service/prisma/instrument.js";
-import mapProvinceScores from "../../utils/lib/mapProvinceScores.js";
+import {groupResponsesByTopic} from "../../utils/lib/map/groupResponsesByTopic.js";
+import { mapResponses, mapXlsResponses } from "../../utils/lib/map/mapResponses.js";
+import { readInstrumentChoiceTypeByTopic } from "../../service/prisma/instrument.js";
+import mapLocation from "../../utils/lib/map/mapLocation.js";
 
 export const postUserResponseController = async (req: FastifyRequest<{ Body: InputResponseSchema }>, res: FastifyReply) => {
   const session = await req.jwtVerify() as TokenPayload
@@ -229,20 +229,31 @@ export const getResponseScore = async (req: FastifyRequest, res: FastifyReply) =
     const { user } = await getSessionUser({ id: session.id }).catch(() => {
       throw new NotFound("User not found.")
     })
+
+    const provinceResponses = await readMetadataScoreValue()
+
+    const instrumentByTopic = await readInstrumentChoiceTypeByTopic()
+
+    const locationScore = await mapLocation(provinceResponses, instrumentByTopic)
   
-    const provinceScores = await readResponsesScoreData();
+    // const provinceScores = await readResponsesScoreData();
 
-    const instrumentCounts = await readInstrumentsCountByTopicPart();
+    // const instrumentCounts = await readInstrumentsCountByTopicPart();
 
-    const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
+    // const mappedScores = mapProvinceScores(provinceScores, instrumentCounts);
 
     return res.code(200).send({
       message: "Province scores successfully retrieved and mapped.",
       data: { 
-        provinceScores, 
-        instrumentCounts, 
-        mappedScores 
+        locationScore
+        // provinceScores, 
+        // instrumentCounts, 
+        // mappedScores 
       },
+      test: {
+        provinceResponses,
+        instrumentByTopic
+      }
     });
   } catch (error) {
 

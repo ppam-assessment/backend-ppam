@@ -1,6 +1,6 @@
 // Definisi pilihan
 import { Prisma } from "@prisma/client";
-import { choiceYa, choiceIdeal } from "../ChoiceOpt.js";
+import { choiceYa, choiceIdeal } from "./data/ChoiceOpt.js";
 // Helper untuk mendapatkan skor berdasarkan value
 const getScore = (value: string): number => {
   const choice = [...choiceYa, ...choiceIdeal].find(choice => choice.value === value);

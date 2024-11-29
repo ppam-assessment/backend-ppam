@@ -105,64 +105,64 @@ export const deleteUserResponsesByInstrumentId = async({userId, instrumentId}: {
 //     })
 // }
 
-export const readResponsesScoreData = async () => {
-    const responses = await prisma.responses.findMany({
-      where: {
-        responder: {
-          metadata: {
-            provinceId: {
-              not: null,
-            },
-            cityId: null,
-          },
-        },
-        value: {
-            in: [
-                'Ya',
-                'Tidak',
-                'Tidak Tahu',
-                'Ideal',
-                'Minimal Diperlukan',
-                'Tidak Memadai'
-            ]
-        }
-        // instrument: {
-        //   type: {
-        //     in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],
-        //   },
-        // }
-      },
-      select: {
-        value: true,
-        instrumentId: true, // Dibutuhkan untuk menghitung jumlah instrumen unik
-        responder: {
-          select: {
-            metadata: {
-              select: {
-                province: {
-                  select: {
-                    id: true,
-                    name: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        instrument: {
-          select: {
-            topic: {
-              select: {
-                topic: true,
-                id: true,
-              },
-            },
-          },
-        },
-      },
-    });
+// export const readResponsesScoreData = async () => {
+//     const responses = await prisma.responses.findMany({
+//       where: {
+//         responder: {
+//           metadata: {
+//             provinceId: {
+//               not: null,
+//             },
+//             cityId: null,
+//           },
+//         },
+//         value: {
+//             in: [
+//                 'Ya',
+//                 'Tidak',
+//                 'Tidak Tahu',
+//                 'Ideal',
+//                 'Minimal Diperlukan',
+//                 'Tidak Memadai'
+//             ]
+//         }
+//         // instrument: {
+//         //   type: {
+//         //     in: [InstrumentType.dropdown, InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.dropdownarea],
+//         //   },
+//         // }
+//       },
+//       select: {
+//         value: true,
+//         instrumentId: true, // Dibutuhkan untuk menghitung jumlah instrumen unik
+//         responder: {
+//           select: {
+//             metadata: {
+//               select: {
+//                 province: {
+//                   select: {
+//                     id: true,
+//                     name: true,
+//                   },
+//                 },
+//               },
+//             },
+//           },
+//         },
+//         instrument: {
+//           select: {
+//             topic: {
+//               select: {
+//                 topic: true,
+//                 id: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     });
   
-    return responses;
-  };
+//     return responses;
+//   };
   
   

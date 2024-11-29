@@ -1,15 +1,14 @@
 import { InstrumentType } from "@prisma/client";
 import prisma from "../../config/prisma.js";
-import { number } from "zod";
 
-export const getAllInstrument = async ({from, to}: {from: number | undefined, to: number | undefined}) => {
+export const getAllInstrument = async ({ from, to }: { from: number | undefined, to: number | undefined }) => {
     const whereCondition = {
         number: {
             not: null,
             gte: from,
             lte: to
         },
-        
+
     };
 
     const instrument = await prisma.instrument.findMany({
@@ -86,26 +85,58 @@ export const updateInstrumentQuestion = async ({ id, question }: { id: number, q
     return 1;
 }
 
-export const readInstrumentsCountByTopicPart = async () => {
-    const instruments =  prisma.instrument.groupBy({
-      by: ["topicId"],
-      where: {
-        type: {
-          in: ["dropdown", "dropdownya", "dropdownideal", "dropdownarea"],
-        },
-        topicId: {
-            not: 0
-        }
-      },
-      _count: {
-        _all: true,
-      },
-      orderBy: {
-        topicId: 'asc'
-      }
-    });
+// export const readInstrumentChoiceType = async () => {
+//     const instruments =  await prisma.instrument.groupBy({
+//       by: ["topicId"],
+//       where: {
+//         type: {
+//           in: [ "dropdownya", "dropdownideal" ],
+//         },
+//         topicId: {
+//             not: 0
+//         }
+//       },
+//       _count: {
+//         question:true
+//       },
+//       orderBy: {
+//         topicId: 'asc'
+//       }
+//     });
 
-  
-    return instruments;
-  };
-  
+//     return instruments;
+//   };
+
+// export const readInstrumentChoiceType = async() => {
+//     const instrument = await prisma.instrument.findMany({
+//         where: {
+
+//         }
+//     })
+// }
+
+export const readInstrumentChoiceTypeByTopic = async () => {
+    const InstrumentCount = await prisma.topics.findMany({
+        where: {
+            NOT: {
+                id: 0
+            }
+        },
+        select: {
+            id: true,
+            _count: {
+                select: {
+                    instrument: {
+                        where: {
+                            type: {
+                                in: [InstrumentType.dropdownya, InstrumentType.dropdownideal]
+                            }
+                        },
+                    }
+                }
+            }
+        }
+    })
+
+    return InstrumentCount
+}

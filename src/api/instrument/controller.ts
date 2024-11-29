@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { getAllInstrument, updateInstrumentQuestion } from "../../service/prisma/instrument.js";
-import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/ChoiceOpt.js"
+import { choiceYa, choiceIdeal, choiceCheck } from "../../utils/lib/data/ChoiceOpt.js"
 import { readAreaChoices } from "../../service/prisma/area.js";
 import { PutInstrumentsSchema } from "./schema.js";
 import { Status } from "@prisma/client";

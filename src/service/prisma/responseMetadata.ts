@@ -107,3 +107,43 @@ export const updateResponseMetadata = async({userId, provinceId, leader, date, p
 
     return metadata;
 }
+
+export const readMetadataScoreValue = async() => {
+    const score = await prisma.responseMetadata.findMany({
+        where:{
+            cityId: null,
+            NOT: {
+                provinceId: null
+            }
+        },
+        select: {
+            responder: {
+                select: {
+                    response: {
+                        where: {
+                            value: {
+                                in: ['Ya', 'Tidak', 'Tidak Tahu', 'Ideal', 'Minimal Diperlukan', 'Tidak Memadai']
+                            }
+                        },
+                        select: {
+                            value: true,
+                            instrument: {
+                                select: {
+                                    topicId: true
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            province: {
+                select: {
+                    name: true
+                }
+            }
+        },
+        distinct: ['provinceId']
+    })
+
+    return score
+}

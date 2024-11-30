@@ -1,52 +1,52 @@
-export default  [
+export default [
     {
         name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 1, 2, 3, 4 ]
+        description: "Kesiapan Keseluruhan Tingkat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
+        topicId: [1, 2, 3, 4]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 5 ]
+        name: "Pelayanan Umum PPAM",
+        description: "Pelayanan PPAM secara Umum",
+        topicId: [5, 6]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 6 ]
+        name: "Kekerasan Seksual",
+        description: "Pencegahan Kekerasan Seksual dan Tanggapan terhadap Kebutuhan Penyintas",
+        topicId: [7]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 7 ]
+        name: "Pencegahan HIV & IMS",
+        description: "Pencegahan dan Pengurangan Kesakitan serta Kematian akibat HIV dan IMS Lainnya",
+        topicId: [8]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 8 ]
+        name: "Maternal & Neonatal",
+        description: "Pencegahan Kesakitan dan Kematian Maternal serta Neonatal",
+        topicId: [9]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 9 ]
+        name: "Kehamilan Tidak Diinginkan",
+        description: "Pencegahan Kehamilan yang Tidak Diinginkan",
+        topicId: [10]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 10 ]
+        name: "Kesehatan Remaja",
+        description: "Layanan Minimum Kesehatan Reproduksi Remaja",
+        topicId: [11]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 11 ]
+        name: "Kesehatan Balita",
+        description: "Layanan Minimum Kesehatan Balita",
+        topicId: [12]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 12 ]
+        name: "Kesehatan Lansia",
+        description: "Layanan Minimum Kesehatan Lansia",
+        topicId: [13]
     },
     {
-        name: "Kesiapan Nasional",
-        description: "Kesiapan keseluruhan tingat Nasional - Kebijakan, Koordinasi, dan Sumber Daya",
-        topicId: [ 13 ]
-    },
-]
+        name: "Perawatan Aborsi Aman",
+        description: "Perawatan Aborsi yang Aman sesuai Hukum yang Berlaku",
+        topicId: [14]
+    }
+];

@@ -7,46 +7,46 @@ export default [
     {
         name: "Pelayanan Umum PPAM",
         description: "Pelayanan PPAM secara Umum",
-        topicId: [5, 6]
+        topicId: [5]
     },
     {
         name: "Kekerasan Seksual",
         description: "Pencegahan Kekerasan Seksual dan Tanggapan terhadap Kebutuhan Penyintas",
-        topicId: [7]
+        topicId: [6]
     },
     {
         name: "Pencegahan HIV & IMS",
         description: "Pencegahan dan Pengurangan Kesakitan serta Kematian akibat HIV dan IMS Lainnya",
-        topicId: [8]
+        topicId: [7]
     },
     {
         name: "Maternal & Neonatal",
         description: "Pencegahan Kesakitan dan Kematian Maternal serta Neonatal",
-        topicId: [9]
+        topicId: [8]
     },
     {
         name: "Kehamilan Tidak Diinginkan",
         description: "Pencegahan Kehamilan yang Tidak Diinginkan",
-        topicId: [10]
+        topicId: [9]
     },
     {
         name: "Kesehatan Remaja",
         description: "Layanan Minimum Kesehatan Reproduksi Remaja",
-        topicId: [11]
+        topicId: [10]
     },
     {
         name: "Kesehatan Balita",
         description: "Layanan Minimum Kesehatan Balita",
-        topicId: [12]
+        topicId: [11]
     },
     {
         name: "Kesehatan Lansia",
         description: "Layanan Minimum Kesehatan Lansia",
-        topicId: [13]
+        topicId: [12]
     },
     {
         name: "Perawatan Aborsi Aman",
         description: "Perawatan Aborsi yang Aman sesuai Hukum yang Berlaku",
-        topicId: [14]
+        topicId: [13]
     }
 ];

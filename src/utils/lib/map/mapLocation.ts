@@ -52,12 +52,12 @@ const mapLocation = async (provinceResponses: ProvinceResponses[], instrumentByT
                     return total + (topicData?._count.instrument || 0);
                 }, 0);
 
-                const percentage = groupScore / totalInstrumentInGroup
+                const percentage = groupScore / totalInstrumentInGroup * 100
 
-                scoreObj[group.name] = percentage
+                scoreObj[group.name] = percentage+'%'
 
                 return scoreObj
-            }, {} as Record<string, number>)
+            }, {} as Record<string, string>)
         }
     })
 

@@ -54,10 +54,10 @@ const mapLocation = async (provinceResponses: ProvinceResponses[], instrumentByT
 
                 const percentage = groupScore / totalInstrumentInGroup * 100
 
-                scoreObj[group.name] = percentage+'%'
+                scoreObj[group.name] = percentage
 
                 return scoreObj
-            }, {} as Record<string, string>)
+            }, {} as Record<string, number>)
         }
     })
 

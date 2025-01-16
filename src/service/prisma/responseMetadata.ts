@@ -1,3 +1,4 @@
+import { InstrumentType } from "@prisma/client";
 import prisma from "../../config/prisma.js"
 
 export const readAllResponseMetadata = async ({ provinceIds, cityIds}: {provinceIds?: number[] | null, cityIds?: number[] | null}) => {
@@ -108,9 +109,49 @@ export const updateResponseMetadata = async({userId, provinceId, leader, date, p
     return metadata;
 }
 
+// export const readMetadataScoreValue = async() => {
+//     const score = await prisma.responseMetadata.findMany({
+//         where:{
+//             cityId: null,
+//             NOT: {
+//                 provinceId: null
+//             }
+//         },
+//         select: {
+//             responder: {
+//                 select: {
+//                     response: {
+//                         where: {
+//                             value: {
+//                                 in: ['Ya', 'Tidak', 'Tidak Tahu', 'Ideal', 'Minimal Diperlukan', 'Tidak Memadai']
+//                             }
+//                         },
+//                         select: {
+//                             value: true,
+//                             instrument: {
+//                                 select: {
+//                                     topicId: true
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//             },
+//             province: {
+//                 select: {
+//                     name: true
+//                 }
+//             }
+//         },
+//         distinct: ['provinceId']
+//     })
+
+//     return score
+// }
+
 export const readMetadataScoreValue = async() => {
     const score = await prisma.responseMetadata.findMany({
-        where:{
+        where: {
             cityId: null,
             NOT: {
                 provinceId: null
@@ -121,15 +162,18 @@ export const readMetadataScoreValue = async() => {
                 select: {
                     response: {
                         where: {
-                            value: {
-                                in: ['Ya', 'Tidak', 'Tidak Tahu', 'Ideal', 'Minimal Diperlukan', 'Tidak Memadai']
+                            instrument: {
+                                type: {
+                                    in: [InstrumentType.dropdownya, InstrumentType.dropdownideal, InstrumentType.checkbox]
+                                }
                             }
                         },
                         select: {
                             value: true,
                             instrument: {
                                 select: {
-                                    topicId: true
+                                    topicId: true,
+                                    type: true
                                 }
                             }
                         }
@@ -143,7 +187,7 @@ export const readMetadataScoreValue = async() => {
             }
         },
         distinct: ['provinceId']
-    })
+    });
 
-    return score
-}
+    return score;
+};

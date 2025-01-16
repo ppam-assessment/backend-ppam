@@ -152,7 +152,6 @@ export const updateResponseMetadata = async({userId, provinceId, leader, date, p
 export const readMetadataScoreValue = async() => {
     const score = await prisma.responseMetadata.findMany({
         where: {
-            cityId: null,
             NOT: {
                 provinceId: null
             }
